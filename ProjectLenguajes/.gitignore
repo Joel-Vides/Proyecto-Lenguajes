@@ -1,0 +1,11 @@
+# Ignorar la carpeta .vs creada por Visual Studio
+.vs/
+
+# Ignorar archivos de configuración de Visual Studio
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# Otros archivos de Visual Studio que no necesitas
+*.dbmdl
