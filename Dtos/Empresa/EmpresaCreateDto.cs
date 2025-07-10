@@ -16,7 +16,6 @@ namespace Terminal.Dtos.Empresa
 
         [Display(Name = "Número de contacto")]
         [Required(ErrorMessage = "El {0} es requerido")]
-        [RegularExpression(@"^\+?[\d\s-]{10,15}$", ErrorMessage = "Número inválido")] // Valida formato telefónico
         public string PhoneNumber { get; set; }
     }
 }

@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Terminal.Database;
-using AutoMapper;
 using Terminal.Helpers;
-using Microsoft.Extensions.DependencyInjection;
 using Scalar.AspNetCore;
+using Terminal.Services.Interfaces;
+using Terminal.Services;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +14,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<TerminalDbContext>(options =>
 options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+
 
 
 builder.Services.AddControllers();
+
+
+
+builder.Services.AddTransient<IEmpresaService, EmpresaService>();
+
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
