@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Terminal.Controllers
 {
-    [Route("api/")]
+    [Route("api/empresa")]
     [ApiController]
     public class EmpresaController : ControllerBase
     {
