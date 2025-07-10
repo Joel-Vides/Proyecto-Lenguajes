@@ -1,6 +1,0 @@
-@ProjectLenguajesAPI_HostAddress = http://localhost:5089
-
-GET {{ProjectLenguajesAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
