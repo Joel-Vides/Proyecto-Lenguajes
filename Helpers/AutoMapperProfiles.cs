@@ -4,9 +4,9 @@ using Terminal.Dtos.Empresa;
 
 namespace Terminal.Helpers
 {
-    public class AutoMapperProfile : Profile
+    public class AutoMapperProfiles : Profile
     {
-        public AutoMapperProfile()
+        public AutoMapperProfiles()
         {
             CreateMap<EmpresaCreateDto, EmpresaEntity>();
             CreateMap<EmpresaEntity, EmpresaDto>();
