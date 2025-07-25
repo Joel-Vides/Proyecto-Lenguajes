@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Terminal.Database.Entities;
+using Terminal.Dtos.Bus;
 using Terminal.Dtos.Empresa;
 
 namespace Terminal.Helpers
@@ -8,9 +9,14 @@ namespace Terminal.Helpers
     {
         public AutoMapperProfiles()
         {
-            CreateMap<EmpresaCreateDto, EmpresaEntity>();
-            CreateMap<EmpresaEntity, EmpresaDto>();
-            CreateMap<EmpresaEntity, EmpresaActionResponseDto>();
+            CreateMap<CompanyCreateDto, CompanyEntity>();
+            CreateMap<CompanyEntity, CompanyDto>();
+            CreateMap<CompanyEntity, CompanyActionResponseDto>();
+
+            CreateMap<BusEntity, BusDto>();
+            CreateMap<BusEntity, BusActionResponseDto>();
+            CreateMap<BusCreateDto, BusEntity>();
+            CreateMap<BusEditDto, BusEntity>();
         }
     }
 }

@@ -11,13 +11,13 @@ using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace Terminal.Services
 {
-    public class EmpresaService : IEmpresaService
+    public class CompanyService : ICompanyService
     {
         private readonly TerminalDbContext _context;
         private readonly IMapper _mapper;
         private readonly int _defaultPageSize;
 
-        public EmpresaService(
+        public CompanyService(
             TerminalDbContext context,
             IMapper mapper,
             IConfiguration configuration)
@@ -27,14 +27,14 @@ namespace Terminal.Services
             _defaultPageSize = configuration.GetValue<int>("Pagination:PageSize");
         }
 
-        public async Task<ResponseDto<PaginationDto<List<EmpresaDto>>>> GetListAsync(
+        public async Task<ResponseDto<PaginationDto<List<CompanyDto>>>> GetListAsync(
             string searchTerm = "", int page = 1, int pageSize = 0)
         {
             pageSize = pageSize == 0 ? _defaultPageSize : pageSize;
 
             try
             {
-                IQueryable<EmpresaEntity> query = _context.Empresas.AsQueryable();
+                IQueryable<CompanyEntity> query = _context.Empresas.AsQueryable();
 
                 if (!string.IsNullOrEmpty(searchTerm))
                 {
@@ -49,18 +49,18 @@ namespace Terminal.Services
                     .Take(pageSize)
                     .ToListAsync();
 
-                return new ResponseDto<PaginationDto<List<EmpresaDto>>>
+                return new ResponseDto<PaginationDto<List<CompanyDto>>>
                 {
                     StatusCode = Constants.HttpStatusCode.OK,
                     Status = true,
                     Message = empresas.Any() ? "Empresas encontradas" : "No hay registros",
-                    Data = new PaginationDto<List<EmpresaDto>>
+                    Data = new PaginationDto<List<CompanyDto>>
                     {
                         CurrentPage = page,
                         PageSize = pageSize,
                         TotalItems = totalRows,
                         TotalPages = (int)Math.Ceiling(totalRows / (double)pageSize),
-                        Items = _mapper.Map<List<EmpresaDto>>(empresas),
+                        Items = _mapper.Map<List<CompanyDto>>(empresas),
                         HasNextPage = page * pageSize < totalRows,
                         HasPreviousPage = page > 1
                     }
@@ -68,7 +68,7 @@ namespace Terminal.Services
             }
             catch
             {
-                return new ResponseDto<PaginationDto<List<EmpresaDto>>>
+                return new ResponseDto<PaginationDto<List<CompanyDto>>>
                 {
                     StatusCode = Constants.HttpStatusCode.BAD_REQUEST,
                     Status = false,
@@ -77,31 +77,31 @@ namespace Terminal.Services
             }
         }
 
-        public async Task<ResponseDto<EmpresaDto>> GetOneByIdAsync(string id)
+        public async Task<ResponseDto<CompanyDto>> GetOneByIdAsync(string id)
         {
             try
             {
                 var empresa = await _context.Empresas.FindAsync(id);
 
                 if (empresa == null)
-                    return new ResponseDto<EmpresaDto>
+                    return new ResponseDto<CompanyDto>
                     {
                         StatusCode = Constants.HttpStatusCode.BAD_REQUEST,
                         Status = false,
                         Message = "Empresa no encontrada"
                     };
 
-                return new ResponseDto<EmpresaDto>
+                return new ResponseDto<CompanyDto>
                 {
                     StatusCode = Constants.HttpStatusCode.OK,
                     Status = true,
                     Message = "Empresa encontrada",
-                    Data = _mapper.Map<EmpresaDto>(empresa)
+                    Data = _mapper.Map<CompanyDto>(empresa)
                 };
             }
             catch
             {
-                return new ResponseDto<EmpresaDto>
+                return new ResponseDto<CompanyDto>
                 {
                     StatusCode = Constants.HttpStatusCode.BAD_REQUEST,
                     Status = false,
@@ -110,39 +110,39 @@ namespace Terminal.Services
             }
         }
 
-        public async Task<ResponseDto<EmpresaActionResponseDto>> CreateAsync(EmpresaCreateDto dto)
+        public async Task<ResponseDto<CompanyActionResponseDto>> CreateAsync(CompanyCreateDto dto)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
                 if (await _context.Empresas.AnyAsync(e => e.Email == dto.Email))
-                    return new ResponseDto<EmpresaActionResponseDto>
+                    return new ResponseDto<CompanyActionResponseDto>
                     {
                         StatusCode = Constants.HttpStatusCode.BAD_REQUEST,
                         Status = false,
                         Message = "El email ya está registrado"
                     };
 
-                var empresa = _mapper.Map<EmpresaEntity>(dto);
+                var empresa = _mapper.Map<CompanyEntity>(dto);
                 empresa.Id = Guid.NewGuid().ToString();
 
                 _context.Empresas.Add(empresa);
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return new ResponseDto<EmpresaActionResponseDto>
+                return new ResponseDto<CompanyActionResponseDto>
                 {
                     StatusCode = Constants.HttpStatusCode.OK,
                     Status = true,
                     Message = "Empresa creada exitosamente",
-                    Data = _mapper.Map<EmpresaActionResponseDto>(empresa)
+                    Data = _mapper.Map<CompanyActionResponseDto>(empresa)
                 };
             }
             catch
             {
                 await transaction.RollbackAsync();
-                return new ResponseDto<EmpresaActionResponseDto>
+                return new ResponseDto<CompanyActionResponseDto>
                 {
                     StatusCode = Constants.HttpStatusCode.INTERNAL_SERVER_ERROR,
                     Status = false,
@@ -151,7 +151,7 @@ namespace Terminal.Services
             }
         }
 
-        public async Task<ResponseDto<EmpresaActionResponseDto>> UpdateAsync(string id, EmpresaDto dto)
+        public async Task<ResponseDto<CompanyActionResponseDto>> UpdateAsync(string id, CompanyDto dto)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
 
@@ -159,7 +159,7 @@ namespace Terminal.Services
             {
                 var empresa = await _context.Empresas.FindAsync(id);
                 if (empresa == null)
-                    return new ResponseDto<EmpresaActionResponseDto>
+                    return new ResponseDto<CompanyActionResponseDto>
                     {
                         StatusCode = Constants.HttpStatusCode.BAD_REQUEST,
                         Status = false,
@@ -170,18 +170,18 @@ namespace Terminal.Services
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return new ResponseDto<EmpresaActionResponseDto>
+                return new ResponseDto<CompanyActionResponseDto>
                 {
                     StatusCode = Constants.HttpStatusCode.OK,
                     Status = true,
                     Message = "Empresa actualizada exitosamente",
-                    Data = _mapper.Map<EmpresaActionResponseDto>(empresa)
+                    Data = _mapper.Map<CompanyActionResponseDto>(empresa)
                 };
             }
             catch
             {
                 await transaction.RollbackAsync();
-                return new ResponseDto<EmpresaActionResponseDto>
+                return new ResponseDto<CompanyActionResponseDto>
                 {
                     StatusCode = Constants.HttpStatusCode.INTERNAL_SERVER_ERROR,
                     Status = false,
@@ -190,13 +190,13 @@ namespace Terminal.Services
             }
         }
 
-        public async Task<ResponseDto<EmpresaActionResponseDto>> DeleteAsync(string id)
+        public async Task<ResponseDto<CompanyActionResponseDto>> DeleteAsync(string id)
         {
             try
             {
                 var empresa = await _context.Empresas.FindAsync(id);
                 if (empresa == null)
-                    return new ResponseDto<EmpresaActionResponseDto>
+                    return new ResponseDto<CompanyActionResponseDto>
                     {
                         StatusCode = Constants.HttpStatusCode.NOT_FOUND,
                         Status = false,
@@ -206,17 +206,17 @@ namespace Terminal.Services
                 _context.Empresas.Remove(empresa);
                 await _context.SaveChangesAsync();
 
-                return new ResponseDto<EmpresaActionResponseDto>
+                return new ResponseDto<CompanyActionResponseDto>
                 {
                     StatusCode = Constants.HttpStatusCode.OK,
                     Status = true,
                     Message = "Empresa eliminada exitosamente",
-                    Data = _mapper.Map<EmpresaActionResponseDto>(empresa)
+                    Data = _mapper.Map<CompanyActionResponseDto>(empresa)
                 };
             }
             catch
             {
-                return new ResponseDto<EmpresaActionResponseDto>
+                return new ResponseDto<CompanyActionResponseDto>
                 {
                     StatusCode = Constants.HttpStatusCode.BAD_REQUEST,
                     Status = false,

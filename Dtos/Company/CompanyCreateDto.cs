@@ -2,7 +2,7 @@
 
 namespace Terminal.Dtos.Empresa
 {
-    public class EmpresaCreateDto
+    public class CompanyCreateDto
     {
         [Display(Name = "Nombre")]
         [Required(ErrorMessage = "El {0} es requerido")]

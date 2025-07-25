@@ -9,6 +9,6 @@ namespace Terminal.Database
             : base(options)
         {
         }
-        public DbSet<EmpresaEntity> Empresas { get; set; }
+        public DbSet<CompanyEntity> Empresas { get; set; }
     }
 }

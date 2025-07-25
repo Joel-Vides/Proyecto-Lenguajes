@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Persons.API.Database.Entities.Common
 {
-    public class BaseEntity
+    public class    
+        BaseEntity
     {
         [Key]
         [Column("id")]
