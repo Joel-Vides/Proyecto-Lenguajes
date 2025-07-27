@@ -1,0 +1,17 @@
+meta {
+  name: Get List
+  type: http
+  seq: 3
+}
+
+get {
+  url: https://localhost:7101/api/empresas?searchTerm&page=1&pageSize=5
+  body: none
+  auth: inherit
+}
+
+params:query {
+  searchTerm: 
+  page: 1
+  pageSize: 5
+}

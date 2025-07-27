@@ -5,15 +5,15 @@ meta {
 }
 
 post {
-  url: {{PATH}}/empresas
+  url: http://localhost:5026/api/empresas
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "name": "empresa",
-    "email": "empresa@emp.com",
-    "phoneNumber": "88888888"
+    "name": "empresa2",
+    "email": "empresa2@emp.com",
+    "phoneNumber": "99999999"
   }
 }
