@@ -6,8 +6,8 @@ using Persons.API.Database.Entities.Common;
 namespace Terminal.Database.Entities
 
 {
-        [Table("empresas")] 
-        public class EmpresaEntity : BaseEntity
+        [Table("companies")] 
+        public class CompanyEntity : BaseEntity
         {
 
             [Column("name")]

@@ -1,6 +1,6 @@
 ﻿namespace Terminal.Dtos.Empresa
 {
-    public class EmpresaActionResponseDto
+    public class CompanyActionResponseDto
     {
         public string Id { get; set; }
         public string Name { get; set; }

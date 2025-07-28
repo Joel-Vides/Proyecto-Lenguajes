@@ -1,6 +1,6 @@
 ﻿namespace Terminal.Dtos.Empresa
 {
-    public class EmpresaEditDto : EmpresaCreateDto
+    public class CompanyEditDto : CompanyCreateDto
     {
 
     }

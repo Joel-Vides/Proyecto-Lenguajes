@@ -1,10 +1,11 @@
-using Microsoft.EntityFrameworkCore;
-using Terminal.Database;
-using Terminal.Helpers;
-using Scalar.AspNetCore;
-using Terminal.Services.Interfaces;
-using Terminal.Services;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
+using Terminal.Database;
+using Terminal.Extensions;
+using Terminal.Helpers;
+using Terminal.Services;
+using Terminal.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +25,9 @@ builder.Services.AddControllers();
 
 
 
-builder.Services.AddTransient<IEmpresaService, EmpresaService>();
+builder.Services.AddTransient<ICompanyService, CompanyService>();
+
+builder.Services.AddCorsConfiguration(builder.Configuration);
 
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -40,6 +43,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
