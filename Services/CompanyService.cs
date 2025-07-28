@@ -125,7 +125,7 @@ namespace Terminal.Services
                     };
 
                 var empresa = _mapper.Map<CompanyEntity>(dto);
-                empresa.Id = Guid.NewGuid().ToString();
+                empresa.Id = Guid.NewGuid();
 
                 _context.Empresas.Add(empresa);
                 await _context.SaveChangesAsync();

@@ -13,10 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Dtos\Bus\BusActionResponseDto.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
@@ -31,10 +27,6 @@
 
   <ItemGroup>
     <ContainerPort Include="8081" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Dtos\Bus\BusActionResponseDto.cs" />
   </ItemGroup>
 
 </Project>
