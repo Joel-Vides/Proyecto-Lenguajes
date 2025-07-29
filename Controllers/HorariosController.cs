@@ -1,25 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Terminal.Dtos.Bus;
 using Terminal.Dtos.Common;
+using Terminal.Dtos.Horarios;
 using Terminal.Services.Interfaces;
 
 namespace Terminal.API.Controllers
 {
-    [Route("api/buses")]
+    [Route("api/horarios")]
     [ApiController]
-    public class BusesController : ControllerBase
+    public class HorariosController : ControllerBase
     {
-        private readonly IBusService _busService;
+        private readonly IHorarioService _horarioService;
 
-        public BusesController(IBusService busService)
+        public HorariosController(IHorarioService horarioService)
         {
-            _busService = busService;
+            _horarioService = horarioService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<ResponseDto<List<BusActionResponse>>>> GetList()
+        public async Task<ActionResult<ResponseDto<List<HorarioActionResponseDto>>>> GetList()
         {
-            var response = await _busService.GetListAsync();
+            var response = await _horarioService.GetListAsync();
 
             return StatusCode(response.StatusCode, new
             {
@@ -30,9 +30,9 @@ namespace Terminal.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResponseDto<BusActionResponse>>> GetOne(string id)
+        public async Task<ActionResult<ResponseDto<HorarioActionResponseDto>>> GetOne(int id)
         {
-            var response = await _busService.GetOneByIdAsync(id);
+            var response = await _horarioService.GetOneByIdAsync(id);
 
             return StatusCode(response.StatusCode, new
             {
@@ -43,9 +43,9 @@ namespace Terminal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResponseDto<BusActionResponse>>> Create([FromBody] BusCreateDto dto)
+        public async Task<ActionResult<ResponseDto<HorarioActionResponseDto>>> Create([FromBody] HorarioCreateDto dto)
         {
-            var response = await _busService.CreateAsync(dto);
+            var response = await _horarioService.CreateAsync(dto);
 
             return StatusCode(response.StatusCode, new
             {
@@ -55,10 +55,10 @@ namespace Terminal.API.Controllers
             });
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<ResponseDto<BusActionResponse>>> Edit([FromBody] BusCreateDto dto, string id)
+        [HttpPut]
+        public async Task<ActionResult<ResponseDto<HorarioActionResponseDto>>> Edit([FromBody] HorarioEditDto dto)
         {
-            var response = await _busService.EditAsync(dto, id);
+            var response = await _horarioService.EditAsync(dto);
 
             return StatusCode(response.StatusCode, new
             {
@@ -69,9 +69,9 @@ namespace Terminal.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ResponseDto<BusActionResponse>>> Delete(string id)
+        public async Task<ActionResult<ResponseDto<HorarioActionResponseDto>>> Delete(int id)
         {
-            var response = await _busService.DeleteAsync(id);
+            var response = await _horarioService.DeleteAsync(id);
 
             return StatusCode(response.StatusCode, new
             {

@@ -27,6 +27,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddTransient<ICompanyService, CompanyService>();
 builder.Services.AddTransient<IBusService, BusService>();
+builder.Services.AddTransient<IHorarioService, HorarioService>();
 
 builder.Services.AddCorsConfiguration(builder.Configuration);
 

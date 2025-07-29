@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
-using Terminal.Constants;
 using Terminal.Database;
 using Terminal.Database.Entities;
 using Terminal.Dtos.Bus;
@@ -39,7 +37,7 @@ namespace Terminal.Services
             };
         }
 
-        public async Task<ResponseDto<BusActionResponse>> GetOneByIdAsync(Guid id)
+        public async Task<ResponseDto<BusActionResponse>> GetOneByIdAsync(string id)
         {
             var bus = await _context.Buses.FindAsync(id);
 
@@ -79,7 +77,7 @@ namespace Terminal.Services
             };
         }
 
-        public async Task<ResponseDto<BusActionResponse>> EditAsync(BusCreateDto dto, Guid id)
+        public async Task<ResponseDto<BusActionResponse>> EditAsync(BusCreateDto dto, string id)
         {
             var busEntity = await _context.Buses.FindAsync(id);
 
@@ -107,7 +105,7 @@ namespace Terminal.Services
             };
         }
 
-        public async Task<ResponseDto<BusActionResponse>> DeleteAsync(Guid id)
+        public async Task<ResponseDto<BusActionResponse>> DeleteAsync(string id)
         {
             var busEntity = await _context.Buses.FindAsync(id);
 
