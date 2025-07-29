@@ -65,7 +65,7 @@ namespace Terminal.Services
         public async Task<ResponseDto<BusActionResponse>> CreateAsync(BusCreateDto dto)
         {
             var busEntity = _mapper.Map<BusEntity>(dto);
-            busEntity.Id = Guid.NewGuid();
+            busEntity.Id = Guid.NewGuid().ToString();
 
             _context.Buses.Add(busEntity);
             await _context.SaveChangesAsync();

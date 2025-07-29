@@ -2,7 +2,7 @@
 {
     public class BusDto
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string NumeroBus { get; set; }
         public string Chofer { get; set; }
         public string Modelo { get; set; }

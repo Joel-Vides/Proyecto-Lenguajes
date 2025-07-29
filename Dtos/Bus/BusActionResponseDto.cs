@@ -4,7 +4,7 @@ namespace Terminal.Dtos.Bus
 {
     public class BusActionResponse
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public string NumeroBus { get; set; }
 
