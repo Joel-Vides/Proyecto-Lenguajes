@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Terminal.API.DTOs;
@@ -8,7 +7,6 @@ using Terminal.Database;
 using Terminal.Database.Entities;
 using Terminal.Dtos.Bus;
 using Terminal.Dtos.Common;
-using Terminal.Dtos.Empresa;
 using Terminal.Services.Interfaces;
 using HttpStatusCode = Terminal.Constants.HttpStatusCode;
 
@@ -17,13 +15,11 @@ namespace Terminal.Services
     public class BusService : IBusService
     {
         private readonly TerminalDbContext _context;
-        private readonly IMapper _mapper;
         private readonly int _defaultPageSize;
 
-        public BusService(TerminalDbContext context, IMapper mapper, IConfiguration configuration)
+        public BusService(TerminalDbContext context, IConfiguration configuration)
         {
             _context = context;
-            _mapper = mapper;
             _defaultPageSize = configuration.GetValue<int>("Pagination:PageSize");
         }
 
@@ -48,18 +44,29 @@ namespace Terminal.Services
                     .Take(pageSize)
                     .ToListAsync();
 
+                var mapped = buses.Select(e => new BusDto
+                {
+                    Id = e.Id,
+                    NumeroBus = e.NumeroBus,
+                    Chofer = e.Chofer,
+                    Modelo = e.Modelo,
+                    Anio = e.Anio,
+                    StartLocation = new() { Latitude = e.StartLatitude, Longitude = e.StartLongitude },
+                    EndLocation = new() { Latitude = e.EndLatitude, Longitude = e.EndLongitude }
+                }).ToList();
+
                 return new ResponseDto<PaginationDto<List<BusDto>>>
                 {
                     StatusCode = HttpStatusCode.OK,
                     Status = true,
-                    Message = buses.Any() ? "Buses encontrados" : "No hay registros",
+                    Message = mapped.Any() ? "Buses encontrados" : "No hay registros",
                     Data = new PaginationDto<List<BusDto>>
                     {
                         CurrentPage = page,
                         PageSize = pageSize,
                         TotalItems = totalRows,
                         TotalPages = (int)Math.Ceiling(totalRows / (double)pageSize),
-                        Items = _mapper.Map<List<BusDto>>(buses),
+                        Items = mapped,
                         HasNextPage = page * pageSize < totalRows,
                         HasPreviousPage = page > 1
                     }
@@ -90,29 +97,61 @@ namespace Terminal.Services
                 };
             }
 
+            var result = new BusActionResponse
+            {
+                Id = bus.Id,
+                NumeroBus = bus.NumeroBus,
+                Chofer = bus.Chofer,
+                Modelo = bus.Modelo,
+                Anio = bus.Anio,
+                StartLocation = new() { Latitude = bus.StartLatitude, Longitude = bus.StartLongitude },
+                EndLocation = new() { Latitude = bus.EndLatitude, Longitude = bus.EndLongitude }
+            };
+
             return new ResponseDto<BusActionResponse>
             {
                 StatusCode = HttpStatusCode.OK,
                 Status = true,
                 Message = "Registro encontrado",
-                Data = _mapper.Map<BusActionResponse>(bus)
+                Data = result
             };
         }
 
         public async Task<ResponseDto<BusActionResponse>> CreateAsync(BusCreateDto dto)
         {
-            var busEntity = _mapper.Map<BusEntity>(dto);
-            busEntity.Id = Guid.NewGuid().ToString();
+            var busEntity = new BusEntity
+            {
+                Id = Guid.NewGuid().ToString(),
+                NumeroBus = dto.NumeroBus,
+                Chofer = dto.Chofer,
+                Modelo = dto.Modelo,
+                Anio = dto.Anio,
+                StartLatitude = dto.StartLocation.Latitude,
+                StartLongitude = dto.StartLocation.Longitude,
+                EndLatitude = dto.EndLocation.Latitude,
+                EndLongitude = dto.EndLocation.Longitude
+            };
 
             _context.Buses.Add(busEntity);
             await _context.SaveChangesAsync();
+
+            var result = new BusActionResponse
+            {
+                Id = busEntity.Id,
+                NumeroBus = busEntity.NumeroBus,
+                Chofer = busEntity.Chofer,
+                Modelo = busEntity.Modelo,
+                Anio = busEntity.Anio,
+                StartLocation = new() { Latitude = busEntity.StartLatitude, Longitude = busEntity.StartLongitude },
+                EndLocation = new() { Latitude = busEntity.EndLatitude, Longitude = busEntity.EndLongitude }
+            };
 
             return new ResponseDto<BusActionResponse>
             {
                 StatusCode = HttpStatusCode.CREATED,
                 Status = true,
                 Message = "Registro creado correctamente",
-                Data = _mapper.Map<BusActionResponse>(busEntity)
+                Data = result
             };
         }
 
@@ -130,17 +169,35 @@ namespace Terminal.Services
                 };
             }
 
-            _mapper.Map(dto, busEntity);
+            busEntity.NumeroBus = dto.NumeroBus;
+            busEntity.Chofer = dto.Chofer;
+            busEntity.Modelo = dto.Modelo;
+            busEntity.Anio = dto.Anio;
+            busEntity.StartLatitude = dto.StartLocation.Latitude;
+            busEntity.StartLongitude = dto.StartLocation.Longitude;
+            busEntity.EndLatitude = dto.EndLocation.Latitude;
+            busEntity.EndLongitude = dto.EndLocation.Longitude;
 
             _context.Buses.Update(busEntity);
             await _context.SaveChangesAsync();
+
+            var result = new BusActionResponse
+            {
+                Id = busEntity.Id,
+                NumeroBus = busEntity.NumeroBus,
+                Chofer = busEntity.Chofer,
+                Modelo = busEntity.Modelo,
+                Anio = busEntity.Anio,
+                StartLocation = new() { Latitude = busEntity.StartLatitude, Longitude = busEntity.StartLongitude },
+                EndLocation = new() { Latitude = busEntity.EndLatitude, Longitude = busEntity.EndLongitude }
+            };
 
             return new ResponseDto<BusActionResponse>
             {
                 StatusCode = HttpStatusCode.OK,
                 Status = true,
                 Message = "Registro editado correctamente",
-                Data = _mapper.Map<BusActionResponse>(busEntity)
+                Data = result
             };
         }
 
@@ -158,18 +215,26 @@ namespace Terminal.Services
                 };
             }
 
-            // Validación de relaciones futuras (placeholder)
-            // Por ahora no hay relaciones, pero aquí podrías validar si el bus tiene horarios, etc.
-
             _context.Buses.Remove(busEntity);
             await _context.SaveChangesAsync();
+
+            var result = new BusActionResponse
+            {
+                Id = busEntity.Id,
+                NumeroBus = busEntity.NumeroBus,
+                Chofer = busEntity.Chofer,
+                Modelo = busEntity.Modelo,
+                Anio = busEntity.Anio,
+                StartLocation = new() { Latitude = busEntity.StartLatitude, Longitude = busEntity.StartLongitude },
+                EndLocation = new() { Latitude = busEntity.EndLatitude, Longitude = busEntity.EndLongitude }
+            };
 
             return new ResponseDto<BusActionResponse>
             {
                 StatusCode = HttpStatusCode.OK,
                 Status = true,
                 Message = "Registro eliminado correctamente",
-                Data = _mapper.Map<BusActionResponse>(busEntity)
+                Data = result
             };
         }
     }

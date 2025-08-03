@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Terminal.Dtos.Common;
 
 namespace Terminal.Dtos.Bus
 {
@@ -24,8 +25,13 @@ namespace Terminal.Dtos.Bus
         [Range(1990, 2100, ErrorMessage = "El {0} debe estar entre {1} y {2}")]
         public int Anio { get; set; }
 
-        //[Display(Name = "Operadora")]
-        //[Required(ErrorMessage = "La {0} es requerida")]
-        //public int OperadoraId { get; set; }
+        // Para lo Ubicacion en el Mapa
+        [Display(Name = "Ubicación de Inicio")]
+        [Required(ErrorMessage = "La {0} es requerida")]
+        public LocationDto StartLocation { get; set; }
+
+        [Display(Name = "Ubicación de Destino")]
+        [Required(ErrorMessage = "La {0} es requerida")]
+        public LocationDto EndLocation { get; set; }
     }
 }

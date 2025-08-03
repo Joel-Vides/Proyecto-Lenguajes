@@ -1,4 +1,6 @@
-﻿namespace Terminal.API.DTOs
+﻿using Terminal.Dtos.Common;
+
+namespace Terminal.API.DTOs
 {
     public class BusDto
     {
@@ -7,5 +9,7 @@
         public string Chofer { get; set; }
         public string Modelo { get; set; }
         public int Anio { get; set; }
+        public LocationDto StartLocation { get; set; }
+        public LocationDto EndLocation { get; set; }
     }
 }

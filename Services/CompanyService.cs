@@ -151,7 +151,7 @@ namespace Terminal.Services
             }
         }
 
-        public async Task<ResponseDto<CompanyActionResponseDto>> UpdateAsync(string id, CompanyDto dto)
+        public async Task<ResponseDto<CompanyActionResponseDto>> UpdateAsync(string id, CompanyEditDto dto)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
 

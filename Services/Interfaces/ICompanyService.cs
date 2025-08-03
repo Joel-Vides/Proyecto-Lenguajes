@@ -7,7 +7,7 @@ namespace Terminal.Services.Interfaces
     {
         Task<ResponseDto<CompanyActionResponseDto>> CreateAsync(CompanyCreateDto dto);
         Task<ResponseDto<CompanyDto>> GetOneByIdAsync(string id);
-        Task<ResponseDto<CompanyActionResponseDto>> UpdateAsync(string id, CompanyDto dto);
+        Task<ResponseDto<CompanyActionResponseDto>> UpdateAsync(string id, CompanyEditDto dto);
         Task<ResponseDto<CompanyActionResponseDto>> DeleteAsync(string id);
         Task<ResponseDto<PaginationDto<List<CompanyDto>>>> GetListAsync(string searchTerm = "", int page = 1, int pageSize = 0);
     }

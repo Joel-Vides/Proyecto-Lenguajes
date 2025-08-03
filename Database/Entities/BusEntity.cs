@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Persons.API.Database.Entities.Common;
+using Terminal.Database.Entities.Common;
 
 namespace Terminal.Database.Entities
 {
@@ -22,5 +23,21 @@ namespace Terminal.Database.Entities
         [Column("anio")]
         [Required]
         public int Anio { get; set; }
+
+        [Required]
+        [Column("start_latitude")]
+        public double StartLatitude { get; set; }
+
+        [Required]
+        [Column("start_longitude")]
+        public double StartLongitude { get; set; }
+
+        [Required]
+        [Column("end_latitude")]
+        public double EndLatitude { get; set; }
+
+        [Required]
+        [Column("end_longitude")]
+        public double EndLongitude { get; set; }
     }
 }

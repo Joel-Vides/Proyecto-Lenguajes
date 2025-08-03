@@ -40,9 +40,8 @@ namespace Terminal.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ResponseDto<CompanyActionResponseDto>>> Update(
-            [FromBody] CompanyDto dto,
-            [FromRoute] string id)
+        public async Task<ActionResult<ResponseDto<List<CompanyActionResponseDto>>>> Update(
+            [FromBody] CompanyEditDto dto, [FromRoute] string id)
         {
             var response = await _companyService.UpdateAsync(id, dto);
             return StatusCode((int)response.StatusCode, response);
