@@ -10,7 +10,8 @@ namespace Terminal.Database
         {
         }
         public DbSet<CompanyEntity> Empresas { get; set; }
-
         public DbSet<BusEntity> Buses { get; set; }
+        public DbSet<HorarioEntity> Horarios { get; set; }
+
     }
 }
