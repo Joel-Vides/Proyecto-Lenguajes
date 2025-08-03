@@ -22,10 +22,10 @@ namespace Terminal.Dtos.Bus
         [Display(Name = "Año")]
         [Required(ErrorMessage = "El {0} es requerido")]
         [Range(1990, 2100, ErrorMessage = "El {0} debe estar entre {1} y {2}")]
-        public int Año { get; set; }
+        public int Anio { get; set; }
 
-        [Display(Name = "Operadora")]
-        [Required(ErrorMessage = "La {0} es requerida")]
-        public int OperadoraId { get; set; }
+        //[Display(Name = "Operadora")]
+        //[Required(ErrorMessage = "La {0} es requerida")]
+        //public int OperadoraId { get; set; }
     }
 }

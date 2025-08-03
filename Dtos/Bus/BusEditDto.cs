@@ -1,6 +1,6 @@
 ﻿namespace Terminal.Dtos.Bus
 {
-    public class BusEditDto
+    public class BusEditDto : BusCreateDto
     {
     }
 }
