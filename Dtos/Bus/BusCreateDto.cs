@@ -25,7 +25,6 @@ namespace Terminal.Dtos.Bus
         [Range(1990, 2100, ErrorMessage = "El {0} debe estar entre {1} y {2}")]
         public int Anio { get; set; }
 
-        // Para lo Ubicacion en el Mapa
         [Display(Name = "Ubicación de Inicio")]
         [Required(ErrorMessage = "La {0} es requerida")]
         public LocationDto StartLocation { get; set; }
@@ -33,5 +32,10 @@ namespace Terminal.Dtos.Bus
         [Display(Name = "Ubicación de Destino")]
         [Required(ErrorMessage = "La {0} es requerida")]
         public LocationDto EndLocation { get; set; }
+
+        // 
+        [Display(Name = "Empresa")]
+        [Required(ErrorMessage = "El {0} es requerido.")]
+        public string CompanyId { get; set; }
     }
 }
