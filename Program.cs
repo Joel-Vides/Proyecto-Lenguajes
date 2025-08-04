@@ -1,6 +1,8 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using Terminal.API.Services;
+using Terminal.API.Services.Interfaces;
 using Terminal.Database;
 using Terminal.Extensions;
 using Terminal.Helpers;
@@ -28,6 +30,7 @@ builder.Services.AddControllers();
 builder.Services.AddTransient<ICompanyService, CompanyService>();
 builder.Services.AddTransient<IBusService, BusService>();
 builder.Services.AddTransient<IHorarioService, HorarioService>();
+builder.Services.AddTransient<ITicketService, TicketService>();
 
 builder.Services.AddCorsConfiguration(builder.Configuration);
 

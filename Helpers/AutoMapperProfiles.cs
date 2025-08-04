@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Terminal.API.Database.Entities;
+using Terminal.API.Dtos.Tickets;
 using Terminal.API.DTOs;
 using Terminal.Database.Entities;
 using Terminal.Dtos.Bus;
 using Terminal.Dtos.Common;
 using Terminal.Dtos.Empresa;
+using Terminal.Dtos.Ticket;
 
 namespace Terminal.Helpers
 {
@@ -15,6 +18,10 @@ namespace Terminal.Helpers
             CreateMap<CompanyCreateDto, CompanyEntity>();
             CreateMap<CompanyEntity, CompanyDto>();
             CreateMap<CompanyEntity, CompanyActionResponseDto>();
+
+            CreateMap<TicketEntity, TicketDto>();
+            CreateMap<TicketEntity, TicketActionResponseDto>();
+            CreateMap<TicketCreateDto, TicketEntity>();
 
             // Bus -> BusDto
             CreateMap<BusEntity, BusDto>()

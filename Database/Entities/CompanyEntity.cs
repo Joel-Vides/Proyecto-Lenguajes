@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Persons.API.Database.Entities.Common;
+using Terminal.Database.Entities.Common;
 
 
 namespace Terminal.Database.Entities
