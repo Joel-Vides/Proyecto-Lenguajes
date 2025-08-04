@@ -18,7 +18,7 @@ namespace Terminal.Controllers
 
         [HttpGet]
         public async Task<ActionResult<ResponseDto<PaginationDto<List<CompanyDto>>>>> GetList(
-         string searchTerm = "", int page = 1, int pageSize = 0)
+            string searchTerm = "", int page = 1, int pageSize = 10) 
         {
             var response = await _companyService.GetListAsync(searchTerm, page, pageSize);
             return StatusCode((int)response.StatusCode, response);

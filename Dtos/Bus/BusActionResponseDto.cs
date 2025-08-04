@@ -12,5 +12,8 @@ namespace Terminal.Dtos.Bus
         public int Anio { get; set; }
         public LocationDto StartLocation { get; set; }
         public LocationDto EndLocation { get; set; }
+
+        // Para Relacion con Companies
+        public string CompanyId { get; set; }
     }
 }

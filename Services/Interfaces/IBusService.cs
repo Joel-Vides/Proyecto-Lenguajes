@@ -10,6 +10,6 @@ namespace Terminal.Services.Interfaces
         Task<ResponseDto<BusActionResponse>> CreateAsync(BusCreateDto dto);
         Task<ResponseDto<BusActionResponse>> EditAsync(BusCreateDto dto, string id);
         Task<ResponseDto<BusActionResponse>> DeleteAsync(string id);
-        Task<ResponseDto<PaginationDto<List<BusDto>>>> GetListAsync(string searchTerm = "", int page = 1, int pageSize = 0);
+        Task<ResponseDto<PaginationDto<List<BusDto>>>> GetListAsync(string searchTerm = "", string companyId = "", int page = 1, int pageSize = 0);
     }
 }

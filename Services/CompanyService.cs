@@ -28,15 +28,18 @@ namespace Terminal.Services
         }
 
         public async Task<ResponseDto<PaginationDto<List<CompanyDto>>>> GetListAsync(
-            string searchTerm = "", int page = 1, int pageSize = 0)
+    string searchTerm = "", int page = 1, int pageSize = 0)
         {
-            pageSize = pageSize == 0 ? _defaultPageSize : pageSize;
+            // 💥 Blindaje definitivo
+            pageSize = (pageSize <= 0) ? (_defaultPageSize > 0 ? _defaultPageSize : 10) : pageSize;
+            page = Math.Max(page, 1);
+            searchTerm = searchTerm ?? "";
 
             try
             {
                 IQueryable<CompanyEntity> query = _context.Empresas.AsQueryable();
 
-                if (!string.IsNullOrEmpty(searchTerm))
+                if (!string.IsNullOrWhiteSpace(searchTerm))
                 {
                     query = query.Where(e =>
                         (e.Name + " " + e.Email + " " + e.PhoneNumber).Contains(searchTerm));
@@ -49,25 +52,29 @@ namespace Terminal.Services
                     .Take(pageSize)
                     .ToListAsync();
 
+                var mapped = _mapper.Map<List<CompanyDto>>(empresas);
+
                 return new ResponseDto<PaginationDto<List<CompanyDto>>>
                 {
                     StatusCode = Constants.HttpStatusCode.OK,
                     Status = true,
-                    Message = empresas.Any() ? "Empresas encontradas" : "No hay registros",
+                    Message = mapped.Any() ? "Empresas encontradas" : "No hay registros",
                     Data = new PaginationDto<List<CompanyDto>>
                     {
                         CurrentPage = page,
                         PageSize = pageSize,
                         TotalItems = totalRows,
-                        TotalPages = (int)Math.Ceiling(totalRows / (double)pageSize),
-                        Items = _mapper.Map<List<CompanyDto>>(empresas),
+                        TotalPages = (int)Math.Ceiling((double)totalRows / pageSize),
+                        Items = mapped,
                         HasNextPage = page * pageSize < totalRows,
                         HasPreviousPage = page > 1
                     }
                 };
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine("[GetListAsync Error]", ex); // 💥 log interno
+
                 return new ResponseDto<PaginationDto<List<CompanyDto>>>
                 {
                     StatusCode = Constants.HttpStatusCode.BAD_REQUEST,

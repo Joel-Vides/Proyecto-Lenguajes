@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Terminal.Database;
 
@@ -10,56 +11,14 @@ using Terminal.Database;
 namespace Terminal.Migrations
 {
     [DbContext(typeof(TerminalDbContext))]
-    partial class TerminalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250803184226_RelacionesBusesEmpresas")]
+    partial class RelacionesBusesEmpresas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
-
-            modelBuilder.Entity("Terminal.API.Database.Entities.TicketEntity", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("created_date");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTime>("FechaEmision")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("fecha_emision");
-
-                    b.Property<int>("NumeroAsiento")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("numero_asiento");
-
-                    b.Property<string>("NumeroTicket")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("numero_ticket");
-
-                    b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("updated_date");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("updated_by");
-
-                    b.Property<decimal>("ValorBoleto")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("valor_boleto");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("tickets");
-                });
 
             modelBuilder.Entity("Terminal.Database.Entities.BusEntity", b =>
                 {

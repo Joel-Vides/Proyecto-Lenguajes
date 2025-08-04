@@ -11,5 +11,8 @@ namespace Terminal.API.DTOs
         public int Anio { get; set; }
         public LocationDto StartLocation { get; set; }
         public LocationDto EndLocation { get; set; }
+
+        // ✨ NUEVO
+        public string CompanyId { get; set; }
     }
 }

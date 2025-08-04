@@ -38,5 +38,12 @@ namespace Terminal.Database.Entities
         [Required]
         [Column("end_longitude")]
         public double EndLongitude { get; set; }
+
+        // Foregn key para la Relación con Company
+        [ForeignKey("Company")]
+        [Column("company_id")]
+        public string CompanyId { get; set; }
+
+        public CompanyEntity Company { get; set; }
     }
 }

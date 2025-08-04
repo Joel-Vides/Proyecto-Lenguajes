@@ -21,9 +21,17 @@ namespace Terminal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ResponseDto<PaginationDto<List<BusDto>>>>> GetList(string searchTerm = "", int page = 1, int pageSize = 0)
+        public async Task<ActionResult<ResponseDto<PaginationDto<List<BusDto>>>>> GetList(string searchTerm = "",
+        string companyId = "",
+        int page = 1,
+        int pageSize = 0)
         {
-            var response = await _busService.GetListAsync(searchTerm, page, pageSize);
+            var response = await _busService.GetListAsync(
+                searchTerm: searchTerm,
+                companyId: "",
+                page: page,
+                pageSize: pageSize);
+
             return StatusCode((int)response.StatusCode, response);
         }
 

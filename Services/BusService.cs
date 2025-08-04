@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using AutoMapper;
 using Terminal.API.DTOs;
 using Terminal.Constants;
 using Terminal.Database;
@@ -16,14 +17,20 @@ namespace Terminal.Services
     {
         private readonly TerminalDbContext _context;
         private readonly int _defaultPageSize;
+        private readonly IMapper _mapper;
 
-        public BusService(TerminalDbContext context, IConfiguration configuration)
+        public BusService(TerminalDbContext context, IConfiguration configuration, IMapper mapper)
         {
             _context = context;
             _defaultPageSize = configuration.GetValue<int>("Pagination:PageSize");
+            _mapper = mapper;
         }
 
-        public async Task<ResponseDto<PaginationDto<List<BusDto>>>> GetListAsync(string searchTerm = "", int page = 1, int pageSize = 0)
+        public async Task<ResponseDto<PaginationDto<List<BusDto>>>> GetListAsync(
+            string searchTerm = "",
+            string companyId = "",
+            int page = 1,
+            int pageSize = 0)
         {
             pageSize = pageSize == 0 ? _defaultPageSize : pageSize;
 
@@ -37,6 +44,11 @@ namespace Terminal.Services
                         (e.NumeroBus + " " + e.Chofer + " " + e.Modelo + " " + e.Anio).Contains(searchTerm));
                 }
 
+                if (!string.IsNullOrEmpty(companyId))
+                {
+                    query = query.Where(e => e.CompanyId == companyId);
+                }
+
                 int totalRows = await query.CountAsync();
                 var buses = await query
                     .OrderBy(e => e.NumeroBus)
@@ -44,16 +56,7 @@ namespace Terminal.Services
                     .Take(pageSize)
                     .ToListAsync();
 
-                var mapped = buses.Select(e => new BusDto
-                {
-                    Id = e.Id,
-                    NumeroBus = e.NumeroBus,
-                    Chofer = e.Chofer,
-                    Modelo = e.Modelo,
-                    Anio = e.Anio,
-                    StartLocation = new() { Latitude = e.StartLatitude, Longitude = e.StartLongitude },
-                    EndLocation = new() { Latitude = e.EndLatitude, Longitude = e.EndLongitude }
-                }).ToList();
+                var mapped = _mapper.Map<List<BusDto>>(buses);
 
                 return new ResponseDto<PaginationDto<List<BusDto>>>
                 {
@@ -97,16 +100,7 @@ namespace Terminal.Services
                 };
             }
 
-            var result = new BusActionResponse
-            {
-                Id = bus.Id,
-                NumeroBus = bus.NumeroBus,
-                Chofer = bus.Chofer,
-                Modelo = bus.Modelo,
-                Anio = bus.Anio,
-                StartLocation = new() { Latitude = bus.StartLatitude, Longitude = bus.StartLongitude },
-                EndLocation = new() { Latitude = bus.EndLatitude, Longitude = bus.EndLongitude }
-            };
+            var result = _mapper.Map<BusActionResponse>(bus);
 
             return new ResponseDto<BusActionResponse>
             {
@@ -119,32 +113,13 @@ namespace Terminal.Services
 
         public async Task<ResponseDto<BusActionResponse>> CreateAsync(BusCreateDto dto)
         {
-            var busEntity = new BusEntity
-            {
-                Id = Guid.NewGuid().ToString(),
-                NumeroBus = dto.NumeroBus,
-                Chofer = dto.Chofer,
-                Modelo = dto.Modelo,
-                Anio = dto.Anio,
-                StartLatitude = dto.StartLocation.Latitude,
-                StartLongitude = dto.StartLocation.Longitude,
-                EndLatitude = dto.EndLocation.Latitude,
-                EndLongitude = dto.EndLocation.Longitude
-            };
+            var busEntity = _mapper.Map<BusEntity>(dto);
+            busEntity.Id = Guid.NewGuid().ToString();
 
             _context.Buses.Add(busEntity);
             await _context.SaveChangesAsync();
 
-            var result = new BusActionResponse
-            {
-                Id = busEntity.Id,
-                NumeroBus = busEntity.NumeroBus,
-                Chofer = busEntity.Chofer,
-                Modelo = busEntity.Modelo,
-                Anio = busEntity.Anio,
-                StartLocation = new() { Latitude = busEntity.StartLatitude, Longitude = busEntity.StartLongitude },
-                EndLocation = new() { Latitude = busEntity.EndLatitude, Longitude = busEntity.EndLongitude }
-            };
+            var result = _mapper.Map<BusActionResponse>(busEntity);
 
             return new ResponseDto<BusActionResponse>
             {
@@ -169,28 +144,12 @@ namespace Terminal.Services
                 };
             }
 
-            busEntity.NumeroBus = dto.NumeroBus;
-            busEntity.Chofer = dto.Chofer;
-            busEntity.Modelo = dto.Modelo;
-            busEntity.Anio = dto.Anio;
-            busEntity.StartLatitude = dto.StartLocation.Latitude;
-            busEntity.StartLongitude = dto.StartLocation.Longitude;
-            busEntity.EndLatitude = dto.EndLocation.Latitude;
-            busEntity.EndLongitude = dto.EndLocation.Longitude;
+            _mapper.Map(dto, busEntity);
 
             _context.Buses.Update(busEntity);
             await _context.SaveChangesAsync();
 
-            var result = new BusActionResponse
-            {
-                Id = busEntity.Id,
-                NumeroBus = busEntity.NumeroBus,
-                Chofer = busEntity.Chofer,
-                Modelo = busEntity.Modelo,
-                Anio = busEntity.Anio,
-                StartLocation = new() { Latitude = busEntity.StartLatitude, Longitude = busEntity.StartLongitude },
-                EndLocation = new() { Latitude = busEntity.EndLatitude, Longitude = busEntity.EndLongitude }
-            };
+            var result = _mapper.Map<BusActionResponse>(busEntity);
 
             return new ResponseDto<BusActionResponse>
             {
@@ -218,16 +177,7 @@ namespace Terminal.Services
             _context.Buses.Remove(busEntity);
             await _context.SaveChangesAsync();
 
-            var result = new BusActionResponse
-            {
-                Id = busEntity.Id,
-                NumeroBus = busEntity.NumeroBus,
-                Chofer = busEntity.Chofer,
-                Modelo = busEntity.Modelo,
-                Anio = busEntity.Anio,
-                StartLocation = new() { Latitude = busEntity.StartLatitude, Longitude = busEntity.StartLongitude },
-                EndLocation = new() { Latitude = busEntity.EndLatitude, Longitude = busEntity.EndLongitude }
-            };
+            var result = _mapper.Map<BusActionResponse>(busEntity);
 
             return new ResponseDto<BusActionResponse>
             {
