@@ -12,7 +12,9 @@ namespace Terminal.API.DTOs
         public LocationDto StartLocation { get; set; }
         public LocationDto EndLocation { get; set; }
 
-        // ✨ NUEVO
+        public string? ImageUrl { get; set; }
+
+        // Empresas
         public string CompanyId { get; set; }
     }
 }

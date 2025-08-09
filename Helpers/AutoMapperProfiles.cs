@@ -28,7 +28,8 @@ namespace Terminal.Helpers
                 {
                     Latitude = src.EndLatitude,
                     Longitude = src.EndLongitude
-                }));
+                }))
+                .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.ImageUrl));
 
             // Bus -> BusActionResponse
             CreateMap<BusEntity, BusActionResponse>()
@@ -42,21 +43,26 @@ namespace Terminal.Helpers
                 {
                     Latitude = src.EndLatitude,
                     Longitude = src.EndLongitude
-                }));
+                }))
+                .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.ImageUrl));
 
             // BusCreateDto -> BusEntity
             CreateMap<BusCreateDto, BusEntity>()
                 .ForMember(dest => dest.StartLatitude, opt => opt.MapFrom(src => src.StartLocation.Latitude))
                 .ForMember(dest => dest.StartLongitude, opt => opt.MapFrom(src => src.StartLocation.Longitude))
                 .ForMember(dest => dest.EndLatitude, opt => opt.MapFrom(src => src.EndLocation.Latitude))
-                .ForMember(dest => dest.EndLongitude, opt => opt.MapFrom(src => src.EndLocation.Longitude));
+                .ForMember(dest => dest.EndLongitude, opt => opt.MapFrom(src => src.EndLocation.Longitude))
+                .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.CompanyId))
+                .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.ImageUrl));
+
 
             // BusEditDto -> BusEntity
             CreateMap<BusEditDto, BusEntity>()
                 .ForMember(dest => dest.StartLatitude, opt => opt.MapFrom(src => src.StartLocation.Latitude))
                 .ForMember(dest => dest.StartLongitude, opt => opt.MapFrom(src => src.StartLocation.Longitude))
                 .ForMember(dest => dest.EndLatitude, opt => opt.MapFrom(src => src.EndLocation.Latitude))
-                .ForMember(dest => dest.EndLongitude, opt => opt.MapFrom(src => src.EndLocation.Longitude));
+                .ForMember(dest => dest.EndLongitude, opt => opt.MapFrom(src => src.EndLocation.Longitude))
+                .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.ImageUrl));
         }
     }
 }

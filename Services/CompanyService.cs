@@ -30,7 +30,6 @@ namespace Terminal.Services
         public async Task<ResponseDto<PaginationDto<List<CompanyDto>>>> GetListAsync(
     string searchTerm = "", int page = 1, int pageSize = 0)
         {
-            // 💥 Blindaje definitivo
             pageSize = (pageSize <= 0) ? (_defaultPageSize > 0 ? _defaultPageSize : 10) : pageSize;
             page = Math.Max(page, 1);
             searchTerm = searchTerm ?? "";
@@ -73,7 +72,7 @@ namespace Terminal.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("[GetListAsync Error]", ex); // 💥 log interno
+                Console.WriteLine("[GetListAsync Error]", ex);
 
                 return new ResponseDto<PaginationDto<List<CompanyDto>>>
                 {

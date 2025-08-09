@@ -1,6 +1,4 @@
-﻿using System.Net;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Terminal.API.DTOs;
 using Terminal.Constants;
@@ -44,9 +42,9 @@ namespace Terminal.Services
                         (e.NumeroBus + " " + e.Chofer + " " + e.Modelo + " " + e.Anio).Contains(searchTerm));
                 }
 
-                if (!string.IsNullOrEmpty(companyId))
+                if (!string.IsNullOrWhiteSpace(companyId))
                 {
-                    query = query.Where(e => e.CompanyId == companyId);
+                    query = query.Where(e => e.CompanyId.ToLower().Trim() == companyId.ToLower().Trim());
                 }
 
                 int totalRows = await query.CountAsync();
@@ -144,7 +142,15 @@ namespace Terminal.Services
                 };
             }
 
+            // Guardar imagen si no sale una nueva
+            var originalImageUrl = busEntity.ImageUrl;
+
             _mapper.Map(dto, busEntity);
+
+            if (string.IsNullOrWhiteSpace(dto.ImageUrl))
+            {
+                busEntity.ImageUrl = originalImageUrl;
+            }
 
             _context.Buses.Update(busEntity);
             await _context.SaveChangesAsync();

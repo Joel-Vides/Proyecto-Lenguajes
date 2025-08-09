@@ -33,7 +33,10 @@ namespace Terminal.Dtos.Bus
         [Required(ErrorMessage = "La {0} es requerida")]
         public LocationDto EndLocation { get; set; }
 
-        // 
+        // Para la Imagen del Bus
+        public string? ImageUrl { get; set; }
+
+        // Empresas
         [Display(Name = "Empresa")]
         [Required(ErrorMessage = "El {0} es requerido.")]
         public string CompanyId { get; set; }

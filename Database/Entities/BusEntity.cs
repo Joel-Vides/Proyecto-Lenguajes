@@ -40,6 +40,9 @@ namespace Terminal.Database.Entities
         [Column("end_longitude")]
         public double EndLongitude { get; set; }
 
+        [Column("image_url")]
+        public string? ImageUrl { get; set; }
+
         // Foregn key para la Relación con Company
         [ForeignKey("Company")]
         [Column("company_id")]
