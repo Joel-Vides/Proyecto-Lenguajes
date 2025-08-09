@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Terminal.Database;
 
@@ -10,9 +11,11 @@ using Terminal.Database;
 namespace Terminal.Migrations
 {
     [DbContext(typeof(TerminalDbContext))]
-    partial class TerminalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250804052653_TicketCorregida")]
+    partial class TicketCorregida
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
@@ -76,10 +79,6 @@ namespace Terminal.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("chofer");
 
-                    b.Property<string>("CompanyId")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("company_id");
-
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("TEXT")
                         .HasColumnName("created_date");
@@ -95,10 +94,6 @@ namespace Terminal.Migrations
                     b.Property<double>("EndLongitude")
                         .HasColumnType("REAL")
                         .HasColumnName("end_longitude");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("image_url");
 
                     b.Property<string>("Modelo")
                         .IsRequired()
@@ -127,8 +122,6 @@ namespace Terminal.Migrations
                         .HasColumnName("updated_by");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
 
                     b.ToTable("bus");
                 });
@@ -215,15 +208,6 @@ namespace Terminal.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("horarios");
-                });
-
-            modelBuilder.Entity("Terminal.Database.Entities.BusEntity", b =>
-                {
-                    b.HasOne("Terminal.Database.Entities.CompanyEntity", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
                 });
 #pragma warning restore 612, 618
         }
