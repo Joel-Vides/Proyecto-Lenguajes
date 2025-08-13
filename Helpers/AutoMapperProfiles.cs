@@ -15,9 +15,9 @@ namespace Terminal.Helpers
         public AutoMapperProfiles()
         {
             // Empresa
-            CreateMap<CompanyCreateDto, CompanyEntity>();
-            CreateMap<CompanyEntity, CompanyDto>();
-            CreateMap<CompanyEntity, CompanyActionResponseDto>();
+            CreateMap<CompanyCreateDto, CompanyEntity>().ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.ImageUrl)); ;
+            CreateMap<CompanyEntity, CompanyDto>().ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.ImageUrl)); ;
+            CreateMap<CompanyEntity, CompanyActionResponseDto>().ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.ImageUrl)); ;
 
             CreateMap<TicketEntity, TicketDto>();
             CreateMap<TicketEntity, TicketActionResponseDto>();

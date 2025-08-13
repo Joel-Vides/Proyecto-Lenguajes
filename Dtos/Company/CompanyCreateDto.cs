@@ -17,5 +17,6 @@ namespace Terminal.Dtos.Empresa
         [Display(Name = "Número de contacto")]
         [Required(ErrorMessage = "El {0} es requerido")]
         public string PhoneNumber { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

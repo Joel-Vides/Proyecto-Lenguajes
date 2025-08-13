@@ -21,5 +21,8 @@ namespace Terminal.Database.Entities
             [Required]
             public string PhoneNumber { get; set; }
 
+            [Column("image_url")]
+            public string? ImageUrl { get; set; }
+
         }
 }

@@ -1,9 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 using Terminal.Constants;
 using Terminal.Database;
 using Terminal.Database.Entities;
+using Terminal.Database.Entities.Common;
 using Terminal.Dtos.Common;
 using Terminal.Dtos.Empresa;
 using Terminal.Services.Interfaces;
@@ -172,6 +173,9 @@ namespace Terminal.Services
                         Message = "Empresa no encontrada"
                     };
 
+
+                // Guardar imagen si no sale una nueva
+                var originalImageUrl = empresa.ImageUrl;
                 _mapper.Map(dto, empresa);
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();

@@ -2,6 +2,7 @@
 using Terminal.Dtos.Common;
 using Terminal.Dtos.Empresa;
 using Terminal.Services.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Terminal.Controllers
 {
@@ -33,16 +34,56 @@ namespace Terminal.Controllers
 
         [HttpPost]
         public async Task<ActionResult<ResponseDto<CompanyActionResponseDto>>> Create(
-            [FromBody] CompanyCreateDto dto)
+            [FromForm] CompanyCreateDto dto, IFormFile image)
         {
+            // Para la Imagen
+            if (image is not null && image.Length > 0)
+            {
+                var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+                var ext = Path.GetExtension(image.FileName).ToLowerInvariant();
+                if (!allowed.Contains(ext))
+                    return BadRequest("Formato de imagen no soportado.");
+
+                var uploadsRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "companies");
+                Directory.CreateDirectory(uploadsRoot);
+
+                var filename = $"{Guid.NewGuid()}{ext}";
+                var fullPath = Path.Combine(uploadsRoot, filename);
+
+                using (var stream = System.IO.File.Create(fullPath))
+                    await image.CopyToAsync(stream);
+
+                dto.ImageUrl = $"/uploads/companies/{filename}";
+            }
+
             var response = await _companyService.CreateAsync(dto);
             return StatusCode((int)response.StatusCode, response);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<ResponseDto<List<CompanyActionResponseDto>>>> Update(
-            [FromBody] CompanyEditDto dto, [FromRoute] string id)
+            [FromForm] CompanyEditDto dto, [FromRoute] string id, IFormFile image)
         {
+            // Para La imgen del Bus
+            if (image is not null && image.Length > 0)
+            {
+                var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+                var ext = Path.GetExtension(image.FileName).ToLowerInvariant();
+                if (!allowed.Contains(ext))
+                    return BadRequest("Formato de imagen no soportado.");
+
+                var uploadsRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "companies");
+                Directory.CreateDirectory(uploadsRoot);
+
+                var filename = $"{Guid.NewGuid()}{ext}";
+                var fullPath = Path.Combine(uploadsRoot, filename);
+
+                using (var stream = System.IO.File.Create(fullPath))
+                    await image.CopyToAsync(stream);
+
+                dto.ImageUrl = $"/uploads/companies/{filename}";
+            }
+
             var response = await _companyService.UpdateAsync(id, dto);
             return StatusCode((int)response.StatusCode, response);
         }
