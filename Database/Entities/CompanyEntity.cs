@@ -24,5 +24,10 @@ namespace Terminal.Database.Entities
             [Column("image_url")]
             public string? ImageUrl { get; set; }
 
-        }
+
+        // Relación uno a muchos con Bus
+        public ICollection<BusEntity> Buses { get; set; }
+
+
+    }
 }

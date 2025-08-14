@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using Terminal.Database.Entities.Common;
 
 namespace Terminal.API.Database.Entities
@@ -14,10 +15,6 @@ namespace Terminal.API.Database.Entities
         [Column("numero_asiento")]
         [Required]
         public int NumeroAsiento { get; set; }
-
-        [Column("valor_boleto")]
-        [Required]
-        public decimal ValorBoleto { get; set; }
 
         [Column("fecha_emision")]
         [Required]

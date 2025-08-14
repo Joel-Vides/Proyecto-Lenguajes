@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Terminal.Database;
 
@@ -15,46 +16,46 @@ namespace Terminal.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Terminal.API.Database.Entities.TicketEntity", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("created_date");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(255)")
                         .HasColumnName("created_by");
 
                     b.Property<DateTime>("FechaEmision")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("fecha_emision");
 
                     b.Property<int>("NumeroAsiento")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("numero_asiento");
 
                     b.Property<string>("NumeroTicket")
                         .IsRequired()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("numero_ticket");
 
                     b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("updated_date");
 
                     b.Property<string>("UpdatedBy")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(255)")
                         .HasColumnName("updated_by");
-
-                    b.Property<decimal>("ValorBoleto")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("valor_boleto");
 
                     b.HasKey("Id");
 
@@ -64,66 +65,66 @@ namespace Terminal.Migrations
             modelBuilder.Entity("Terminal.Database.Entities.BusEntity", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("id");
 
                     b.Property<int>("Anio")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("anio");
 
                     b.Property<string>("Chofer")
                         .IsRequired()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("chofer");
 
                     b.Property<string>("CompanyId")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("company_id");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("created_date");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(255)")
                         .HasColumnName("created_by");
 
                     b.Property<double>("EndLatitude")
-                        .HasColumnType("REAL")
+                        .HasColumnType("float")
                         .HasColumnName("end_latitude");
 
                     b.Property<double>("EndLongitude")
-                        .HasColumnType("REAL")
+                        .HasColumnType("float")
                         .HasColumnName("end_longitude");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("image_url");
 
                     b.Property<string>("Modelo")
                         .IsRequired()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("modelo");
 
                     b.Property<string>("NumeroBus")
                         .IsRequired()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("numero_bus");
 
                     b.Property<double>("StartLatitude")
-                        .HasColumnType("REAL")
+                        .HasColumnType("float")
                         .HasColumnName("start_latitude");
 
                     b.Property<double>("StartLongitude")
-                        .HasColumnType("REAL")
+                        .HasColumnType("float")
                         .HasColumnName("start_longitude");
 
                     b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("updated_date");
 
                     b.Property<string>("UpdatedBy")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(255)")
                         .HasColumnName("updated_by");
 
                     b.HasKey("Id");
@@ -136,41 +137,41 @@ namespace Terminal.Migrations
             modelBuilder.Entity("Terminal.Database.Entities.CompanyEntity", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("created_date");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(255)")
                         .HasColumnName("created_by");
 
                     b.Property<string>("Email")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("email");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("image_url");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("name");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("phone_number");
 
                     b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("updated_date");
 
                     b.Property<string>("UpdatedBy")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(255)")
                         .HasColumnName("updated_by");
 
                     b.HasKey("Id");
@@ -181,44 +182,94 @@ namespace Terminal.Migrations
             modelBuilder.Entity("Terminal.Database.Entities.HorarioEntity", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("created_date");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(255)")
                         .HasColumnName("created_by");
 
-                    b.Property<TimeSpan>("HoraLlegada")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("hora_llegada");
-
-                    b.Property<TimeSpan>("HoraSalida")
-                        .HasColumnType("TEXT")
+                    b.Property<string>("HoraLlegada")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
                         .HasColumnName("hora_salida");
 
-                    b.Property<decimal>("Precio")
-                        .HasColumnType("TEXT")
+                    b.Property<string>("HoraSalida")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("hora_llegada");
+
+                    b.Property<string>("Precio")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("precio");
 
-                    b.Property<int>("RutaId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("ruta_id");
-
                     b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("updated_date");
 
                     b.Property<string>("UpdatedBy")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(255)")
                         .HasColumnName("updated_by");
 
                     b.HasKey("Id");
 
                     b.ToTable("horarios");
+                });
+
+            modelBuilder.Entity("Terminal.Database.Entities.RutaEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_date");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("created_by");
+
+                    b.Property<string>("SitioDestino")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("SitioSalida")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("TotalKilometros")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_date");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("updated_by");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ruta");
                 });
 
             modelBuilder.Entity("Terminal.Database.Entities.BusEntity", b =>

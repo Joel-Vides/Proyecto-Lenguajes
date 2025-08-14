@@ -7,19 +7,19 @@ namespace Terminal.Database.Entities.Common
         BaseEntity
     {
         [Key]
-        [Column("id")]
+        [Column("id", TypeName = "nvarchar(100)")]
         public string Id { get; set; }
 
-        [Column("created_by")]
+        [Column("created_by", TypeName = "nvarchar(255)")]
         public string CreatedBy { get; set; }
 
-        [Column("created_date")]
+        [Column("created_date", TypeName = "datetime2")]
         public DateTime CreateDate { get; set; }
 
-        [Column("updated_by")]
+        [Column("updated_by", TypeName = "nvarchar(255)")]
         public string UpdatedBy { get; set; }
 
-        [Column("updated_date")]
+        [Column("updated_date", TypeName = "datetime2")]
         public DateTime UpdateDate { get; set; }
     }
 }

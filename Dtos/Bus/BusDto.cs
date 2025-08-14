@@ -16,5 +16,7 @@ namespace Terminal.API.DTOs
 
         // Empresas
         public string CompanyId { get; set; }
+        public string CompanyName { get; set; }
+
     }
 }

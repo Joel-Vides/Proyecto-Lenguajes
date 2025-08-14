@@ -6,6 +6,7 @@ using Terminal.Database.Entities;
 using Terminal.Dtos.Bus;
 using Terminal.Dtos.Common;
 using Terminal.Dtos.Empresa;
+using Terminal.Dtos.Ruta;
 using Terminal.Dtos.Ticket;
 
 namespace Terminal.Helpers
@@ -22,6 +23,21 @@ namespace Terminal.Helpers
             CreateMap<TicketEntity, TicketDto>();
             CreateMap<TicketEntity, TicketActionResponseDto>();
             CreateMap<TicketCreateDto, TicketEntity>();
+
+            //RutaMapper
+
+            CreateMap<RutaEntity, RutaDto>().ReverseMap();
+            CreateMap<RutaCreateDto, RutaEntity>();
+            CreateMap<RutaEditDto, RutaEntity>();
+            CreateMap<RutaEntity, RutaActionResponseDto>();
+
+            CreateMap<BusEntity, BusDto>()
+            .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Company.Name));
+
+            CreateMap<CompanyEntity, CompanyDto>();
+
+
+
 
             // Bus -> BusDto
             CreateMap<BusEntity, BusDto>()

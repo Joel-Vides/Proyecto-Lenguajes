@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Scalar.AspNetCore;
 using Terminal.API.Services;
 using Terminal.API.Services.Interfaces;
@@ -11,26 +12,26 @@ using Terminal.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
- //Add services to the container.
-
+//Add services to the container.
 
 builder.Services.AddDbContext<TerminalDbContext>(options =>
-options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+//builder.Services.AddDbContext<TerminalDbContext>(options =>
+//options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 
-
-
 builder.Services.AddControllers();
-
-
 
 builder.Services.AddTransient<ICompanyService, CompanyService>();
 builder.Services.AddTransient<IBusService, BusService>();
 builder.Services.AddTransient<IHorarioService, HorarioService>();
 builder.Services.AddTransient<ITicketService, TicketService>();
+builder.Services.AddTransient<IRutaService, RutaService>();
 
 builder.Services.AddCorsConfiguration(builder.Configuration);
 

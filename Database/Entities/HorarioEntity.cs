@@ -7,20 +7,26 @@ namespace Terminal.Database.Entities
     [Table("horarios")]
     public class HorarioEntity : BaseEntity
     {
-        [Column("hora_salida")]
-        [Required]
-        public TimeSpan HoraSalida { get; set; }
-
         [Column("hora_llegada")]
         [Required]
-        public TimeSpan HoraLlegada { get; set; }
+        [MaxLength(100)]
+        public string HoraSalida { get; set; }
+
+        [Column("hora_salida")]
+        [Required]
+        [MaxLength(100)]
+        public string HoraLlegada { get; set; }
 
         [Column("precio")]
         [Required]
-        public decimal Precio { get; set; }
+        public string Precio { get; set; }
 
-        [Column("ruta_id")]
-        [Required]
-        public int RutaId { get; set; }
+        //[Column("bus_id")]
+        //[Required]
+        //public int BusId { get; set; }
+
+        //[Column("company_id")]
+        //[Required]
+        //public int CompanyId { get; set; }
     }
 }
