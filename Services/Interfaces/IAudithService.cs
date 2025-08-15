@@ -1,6 +1,6 @@
 ﻿namespace Terminal.Services.Interfaces
 {
-    public interface IAuditService
+    public interface IAudithService
     {
         string GetUserId();
     }

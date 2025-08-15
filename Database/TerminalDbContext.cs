@@ -10,12 +10,12 @@ namespace Terminal.Database
     public class TerminalDbContext : IdentityDbContext<UserEntity, RoleEntity, string>
     {
 
-        private readonly IAuditService _auditService;
+        private readonly IAudithService _audithService;
 
         public TerminalDbContext(DbContextOptions options,
-            IAuditService auditService) : base(options)
+            IAudithService audithService) : base(options)
         {
-            _auditService = auditService;
+            _audithService = audithService;
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -51,14 +51,14 @@ namespace Terminal.Database
                     if (entityEntry.State == EntityState.Added)
                     {
                         entity.CreateDate = DateTime.Now;
-                        entity.CreatedBy = _auditService.GetUserId();
+                        entity.CreatedBy = _audithService.GetUserId();
                         entity.UpdateDate = DateTime.Now;
-                        entity.UpdatedBy = _auditService.GetUserId();
+                        entity.UpdatedBy = _audithService.GetUserId();
                     }
                     else
                     {
                         entity.UpdateDate = DateTime.Now;
-                        entity.UpdatedBy = _auditService.GetUserId();
+                        entity.UpdatedBy = _audithService.GetUserId();
                     }
                 }
             }

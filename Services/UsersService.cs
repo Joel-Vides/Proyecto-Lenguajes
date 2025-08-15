@@ -111,6 +111,7 @@ namespace Terminal.Services
 
         public async Task<ResponseDto<UserActionResponseDto>> CreateAsync(UserCreateDto dto)
         {
+
             if (dto.Roles != null && dto.Roles.Any())
             {
                 var existingRoles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();

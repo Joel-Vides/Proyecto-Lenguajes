@@ -5,21 +5,20 @@ meta {
 }
 
 put {
-  url: {{PATH}}
+  url: {{PATH}}/users/9512e8fc-7195-4032-b65c-684fd55d04f7
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "firstName": "Maria",
-    "lastName": "Mejia",
-    "email": "mmejia.com",
-    "birthDate": "",
-    "roles": [
-      "Sysadmin"
-    ],
-    "password": "123456",
-    "confirmPassword": "123456"
+    "firstName": "Fernando",
+    "lastName": "Maldonado",
+    "email": "fernando@ejemplo.com",
+    "birthDate": "1990-01-01",
+    "roles": ["SYS_ADMIN"],
+    "password": "Micontraseña123!",
+    "confirmPassword": "Micontraseña123!"
   }
+  
 }

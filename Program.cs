@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -12,12 +13,20 @@ using Terminal.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 //Add services to the container.
+
+builder.Services.AddScoped<IAudithService, AudithService>();
 
 builder.Services.AddDbContext<TerminalDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//Validacion toke
+
+builder.Services.AddAuthenticationConfig(builder.Configuration);
+
 //Acceder Al contexto HTTP
+
 
 builder.Services.AddHttpContextAccessor();
 
@@ -27,12 +36,6 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
-
-
-//builder.Services.AddIdentity<UserEntity, RoleEntity>()
-//    .AddEntityFrameworkStores<TerminalDbContext>()
-//    .AddDefaultTokenProviders();
-
 
 
 builder.Services.AddControllers();
@@ -45,10 +48,9 @@ builder.Services.AddTransient<IRutaService, RutaService>();
 builder.Services.AddTransient<IRolesService, RolesService>();
 builder.Services.AddTransient<IUsersService, UsersService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddScoped<IAuditService, AuditService>();
+builder.Services.AddScoped<IAudithService, AudithService>();
 
 builder.Services.AddCorsConfiguration(builder.Configuration);
-builder.Services.AddAuthenticationConfig(builder.Configuration);
 
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

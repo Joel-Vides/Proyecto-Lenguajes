@@ -10,7 +10,7 @@ namespace Terminal.Controllers
 {
     [Route("api/users")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class UsersController : ControllerBase
     {
         private readonly IUsersService _usersService;
@@ -22,7 +22,6 @@ namespace Terminal.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<PaginationDto<List<UserDto>>>>>
             GetPaginationList(string searchTerm = "", int page = 1, int pageSize = 0)
         {
@@ -39,7 +38,6 @@ namespace Terminal.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<UserDto>>> GetOneById(
             string id)
         {
@@ -54,7 +52,6 @@ namespace Terminal.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<UserActionResponseDto>>>
             Create([FromBody] UserCreateDto dto)
         {
@@ -71,7 +68,6 @@ namespace Terminal.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<UserActionResponseDto>>> Edit(
             [FromBody] UserEditDto dto, string id)
         {
@@ -88,7 +84,6 @@ namespace Terminal.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<UserActionResponseDto>>>
             Delete(string id)
         {

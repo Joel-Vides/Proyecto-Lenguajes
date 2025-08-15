@@ -10,7 +10,7 @@ namespace Terminal.Controllers
 {
     [Route("api/roles")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class RolesController : ControllerBase
     {
         private readonly IRolesService _rolesService;
@@ -21,7 +21,6 @@ namespace Terminal.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<PaginationDto
             <List<RoleDto>>>>> GetListPagination(
             string searchTerm = "", int page = 1, int pageSize = 10
@@ -40,7 +39,6 @@ namespace Terminal.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<RoleDto>>> GetOneById(string id)
         {
             var response = await _rolesService.GetOneById(id);
@@ -54,7 +52,6 @@ namespace Terminal.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<RoleActionResponseDto>>>
             CreateAsync(
             RoleCreateDto dto
@@ -71,7 +68,6 @@ namespace Terminal.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<RoleActionResponseDto>>> Edit(
             [FromBody] RoleEditDto dto, string id
             )
@@ -87,7 +83,6 @@ namespace Terminal.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<RoleActionResponseDto>>> Delete(string id)
         {
             var response = await _rolesService.DeleteAsync(id);

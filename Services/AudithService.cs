@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace Terminal.Services
 {
-    public class AuditService : IAuditService
+    public class AudithService : IAudithService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuditService(IHttpContextAccessor httpContextAccessor)
+        public AudithService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }
