@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Terminal.Dtos.Common;
 using Terminal.Dtos.Empresa;
 using Terminal.Services.Interfaces;
@@ -7,6 +8,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace Terminal.Controllers
 {
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/companies")]
     public class EmpresasController : ControllerBase
     {

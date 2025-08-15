@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Terminal.API.DTOs;
+using Terminal.Constants;
 using Terminal.Dtos.Bus;
 using Terminal.Dtos.Common;
 using Terminal.Services.Interfaces;
@@ -7,6 +9,7 @@ using Terminal.Services.Interfaces;
 namespace Terminal.API.Controllers
 {
     [Route("api/buses")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
     public class BusesController : ControllerBase
     {
@@ -18,6 +21,7 @@ namespace Terminal.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}, {RolesConstant.NORMAL_USER}")]
         public async Task<ActionResult<ResponseDto<PaginationDto<List<BusDto>>>>> GetList(
             [FromQuery] string searchTerm = "",
             [FromQuery] string companyId = "",
@@ -35,6 +39,7 @@ namespace Terminal.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}, {RolesConstant.NORMAL_USER}")]
         public async Task<ActionResult<ResponseDto<BusActionResponse>>> GetOne(string id)
         {
             var response = await _busService.GetOneByIdAsync(id);
@@ -42,6 +47,7 @@ namespace Terminal.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<BusActionResponse>>> Create(
             [FromForm] BusCreateDto dto,
             IFormFile? image)
@@ -71,6 +77,7 @@ namespace Terminal.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}, {RolesConstant.NORMAL_USER}")]
         public async Task<ActionResult<ResponseDto<BusActionResponse>>> Edit(
             [FromForm] BusCreateDto dto,
             IFormFile? image,
@@ -102,6 +109,7 @@ namespace Terminal.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}, {RolesConstant.NORMAL_USER}")]
         public async Task<ActionResult<ResponseDto<BusActionResponse>>> Delete(string id)
         {
             var response = await _busService.DeleteAsync(id);

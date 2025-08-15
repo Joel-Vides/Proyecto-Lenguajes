@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Terminal.Dtos.Common;
 using Terminal.Dtos.Ruta;
 using Terminal.Services.Interfaces;
@@ -6,6 +7,7 @@ using Terminal.Services.Interfaces;
 namespace Terminal.Controllers
 {
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/rutas")]
     public class RutaController : ControllerBase
     {

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Terminal.Constants;
 using Terminal.Dtos.Common;
 using Terminal.Dtos.Horarios;
 using Terminal.Services.Interfaces;
@@ -6,6 +8,7 @@ using Terminal.Services.Interfaces;
 namespace Terminal.API.Controllers
 {
     [Route("api/horarios")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
     public class HorariosController : ControllerBase
     {
@@ -17,6 +20,7 @@ namespace Terminal.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}, {RolesConstant.NORMAL_USER}")]
         public async Task<ActionResult<ResponseDto<List<HorarioActionResponseDto>>>> GetList()
         {
             var response = await _horarioService.GetListAsync();
@@ -25,6 +29,7 @@ namespace Terminal.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}, {RolesConstant.NORMAL_USER}")]
         public async Task<ActionResult<ResponseDto<HorarioActionResponseDto>>> GetOne(int id)
         {
             var response = await _horarioService.GetOneByIdAsync(id);
@@ -33,6 +38,7 @@ namespace Terminal.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<HorarioActionResponseDto>>> Create([FromBody] HorarioCreateDto dto)
         {
             var response = await _horarioService.CreateAsync(dto);
@@ -41,6 +47,7 @@ namespace Terminal.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<HorarioActionResponseDto>>> Edit([FromBody] HorarioEditDto dto, int id)
         {
             dto.Id = id;
@@ -50,6 +57,7 @@ namespace Terminal.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = $"{RolesConstant.SYS_ADMIN}")]
         public async Task<ActionResult<ResponseDto<HorarioActionResponseDto>>> Delete(int id)
         {
             var response = await _horarioService.DeleteAsync(id);
