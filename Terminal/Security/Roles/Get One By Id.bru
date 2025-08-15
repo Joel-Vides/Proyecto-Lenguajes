@@ -1,0 +1,27 @@
+meta {
+  name: Get One By Id
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{PATH}}/roles?searchTerm&page=1&pageSize=10
+  body: none
+  auth: inherit
+}
+
+params:query {
+  searchTerm: 
+  page: 1
+  pageSize: 10
+}
+
+body:json {
+  {
+    
+    "name" : "SYS_ADMIN",
+    "description" : "Permiso para gestionar la seguridad de la aplicacion"
+    
+  }
+  
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Create
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{PATH}}/users
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "firstName": "Diego",
+    "lastName": "Maldonado",
+    "email": "diegomaldonado@unah.hn",
+    "birthDate": "24/12/1996",
+    "roles": [
+      "Sysadmin"
+    ],
+    "password": "123456",
+    "confirmPassword": "123456"
+  }
+}

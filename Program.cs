@@ -1,13 +1,11 @@
-using AutoMapper;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Scalar.AspNetCore;
 using Terminal.API.Services;
 using Terminal.API.Services.Interfaces;
 using Terminal.Database;
-using Terminal.Database.Entities;
 using Terminal.Extensions;
+using Terminal.Filters;
 using Terminal.Helpers;
 using Terminal.Services;
 using Terminal.Services.Interfaces;
@@ -23,15 +21,17 @@ builder.Services.AddDbContext<TerminalDbContext>(options =>
 
 builder.Services.AddHttpContextAccessor();
 
-//builder.Services.AddDbContext<TerminalDbContext>(options =>
-//options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
-builder.Services.AddIdentity<UserEntity, RoleEntity>()
-    .AddEntityFrameworkStores<TerminalDbContext>()
-    .AddDefaultTokenProviders();
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
+
+//builder.Services.AddIdentity<UserEntity, RoleEntity>()
+//    .AddEntityFrameworkStores<TerminalDbContext>()
+//    .AddDefaultTokenProviders();
 
 
 
@@ -48,6 +48,7 @@ builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuditService, AuditService>();
 
 builder.Services.AddCorsConfiguration(builder.Configuration);
+builder.Services.AddAuthenticationConfig(builder.Configuration);
 
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
