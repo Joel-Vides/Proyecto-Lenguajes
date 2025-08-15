@@ -22,44 +22,110 @@ namespace Terminal.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Terminal.API.Database.Entities.TicketEntity", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("id");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_date");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("created_by");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FechaEmision")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("fecha_emision");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NumeroAsiento")
-                        .HasColumnType("int")
-                        .HasColumnName("numero_asiento");
-
-                    b.Property<string>("NumeroTicket")
+                    b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("numero_ticket");
-
-                    b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("updated_date");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(255)")
-                        .HasColumnName("updated_by");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("tickets");
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("sec_roles_claims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("sec_users_claims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("sec_users_logins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("sec_users_roles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("sec_users_tokens", (string)null);
                 });
 
             modelBuilder.Entity("Terminal.Database.Entities.BusEntity", b =>
@@ -111,6 +177,10 @@ namespace Terminal.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("numero_bus");
 
+                    b.Property<int>("RutaId")
+                        .HasColumnType("int")
+                        .HasColumnName("ruta_id");
+
                     b.Property<double>("StartLatitude")
                         .HasColumnType("float")
                         .HasColumnName("start_latitude");
@@ -131,6 +201,8 @@ namespace Terminal.Migrations
 
                     b.HasIndex("CompanyId");
 
+                    b.HasIndex("RutaId");
+
                     b.ToTable("bus");
                 });
 
@@ -147,6 +219,9 @@ namespace Terminal.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("created_by");
+
+                    b.Property<string>("CreatedByUserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)")
@@ -174,7 +249,14 @@ namespace Terminal.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("updated_by");
 
+                    b.Property<string>("UpdatedByUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("UpdatedByUserId");
 
                     b.ToTable("companies");
                 });
@@ -185,6 +267,14 @@ namespace Terminal.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("id");
 
+                    b.Property<string>("BusId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("bus_id");
+
+                    b.Property<string>("CompanyId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("company_id");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("created_date");
@@ -193,22 +283,21 @@ namespace Terminal.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("created_by");
 
-                    b.Property<string>("HoraLlegada")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("hora_salida");
-
-                    b.Property<string>("HoraSalida")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                    b.Property<DateTime>("HoraLlegada")
+                        .HasColumnType("datetime2")
                         .HasColumnName("hora_llegada");
 
-                    b.Property<string>("Precio")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                    b.Property<DateTime>("HoraSalida")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("hora_salida");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("decimal(18,2)")
                         .HasColumnName("precio");
+
+                    b.Property<int>("RutaId")
+                        .HasColumnType("int")
+                        .HasColumnName("ruta_id");
 
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2")
@@ -220,7 +309,45 @@ namespace Terminal.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BusId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("RutaId");
+
                     b.ToTable("horarios");
+                });
+
+            modelBuilder.Entity("Terminal.Database.Entities.RoleEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("sec_roles", (string)null);
                 });
 
             modelBuilder.Entity("Terminal.Database.Entities.RutaEntity", b =>
@@ -272,13 +399,282 @@ namespace Terminal.Migrations
                     b.ToTable("ruta");
                 });
 
+            modelBuilder.Entity("Terminal.Database.Entities.TicketEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_date");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTime>("FechaEmision")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fecha_emision");
+
+                    b.Property<int>("HorarioId")
+                        .HasColumnType("int")
+                        .HasColumnName("horario_id");
+
+                    b.Property<string>("HorarioId1")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("NumeroAsiento")
+                        .HasColumnType("int")
+                        .HasColumnName("numero_asiento");
+
+                    b.Property<string>("NumeroTicket")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("numero_ticket");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_date");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("updated_by");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HorarioId1");
+
+                    b.ToTable("tickets");
+                });
+
+            modelBuilder.Entity("Terminal.Database.Entities.UserEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AvatarUrl")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("avatar_url");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("birth_date");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("first_name");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("last_name");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("refresh_token");
+
+                    b.Property<DateTime>("RefreshTokenExpiry")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("refresh_token_expiry");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("sec_users", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Terminal.Database.Entities.RoleEntity", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("Terminal.Database.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("Terminal.Database.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Terminal.Database.Entities.RoleEntity", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Terminal.Database.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("Terminal.Database.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Terminal.Database.Entities.BusEntity", b =>
                 {
                     b.HasOne("Terminal.Database.Entities.CompanyEntity", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .WithMany("Buses")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Terminal.Database.Entities.RutaEntity", "Ruta")
+                        .WithMany("Buses")
+                        .HasForeignKey("RutaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Company");
+
+                    b.Navigation("Ruta");
+                });
+
+            modelBuilder.Entity("Terminal.Database.Entities.CompanyEntity", b =>
+                {
+                    b.HasOne("Terminal.Database.Entities.UserEntity", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId");
+
+                    b.HasOne("Terminal.Database.Entities.UserEntity", "UpdatedByUser")
+                        .WithMany()
+                        .HasForeignKey("UpdatedByUserId");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("UpdatedByUser");
+                });
+
+            modelBuilder.Entity("Terminal.Database.Entities.HorarioEntity", b =>
+                {
+                    b.HasOne("Terminal.Database.Entities.BusEntity", "Bus")
+                        .WithMany("Horarios")
+                        .HasForeignKey("BusId");
+
+                    b.HasOne("Terminal.Database.Entities.CompanyEntity", "Company")
+                        .WithMany("Horarios")
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("Terminal.Database.Entities.RutaEntity", "Ruta")
+                        .WithMany()
+                        .HasForeignKey("RutaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bus");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Ruta");
+                });
+
+            modelBuilder.Entity("Terminal.Database.Entities.TicketEntity", b =>
+                {
+                    b.HasOne("Terminal.Database.Entities.HorarioEntity", "Horario")
+                        .WithMany("Tickets")
+                        .HasForeignKey("HorarioId1");
+
+                    b.Navigation("Horario");
+                });
+
+            modelBuilder.Entity("Terminal.Database.Entities.BusEntity", b =>
+                {
+                    b.Navigation("Horarios");
+                });
+
+            modelBuilder.Entity("Terminal.Database.Entities.CompanyEntity", b =>
+                {
+                    b.Navigation("Buses");
+
+                    b.Navigation("Horarios");
+                });
+
+            modelBuilder.Entity("Terminal.Database.Entities.HorarioEntity", b =>
+                {
+                    b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("Terminal.Database.Entities.RutaEntity", b =>
+                {
+                    b.Navigation("Buses");
                 });
 #pragma warning restore 612, 618
         }

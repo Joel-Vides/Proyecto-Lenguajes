@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Terminal.API.Dtos.Tickets;
 using Terminal.API.Services.Interfaces;
 using Terminal.Dtos.Common;
 using Terminal.Dtos.Ticket;
-using Terminal.Services.Interfaces;
 
 namespace Terminal.API.Controllers
 {
@@ -24,20 +22,13 @@ namespace Terminal.API.Controllers
         )
         {
             var response = await _ticketService.GetListAsync(searchTerm, page, pageSize);
-
-            return StatusCode(response.StatusCode, new
-            {
-                response.Status,
-                response.Message,
-                response.Data
-            });
+            return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseDto<TicketDto>>> GetOne(string id)
         {
             var response = await _ticketService.GetOneByIdAsync(id);
-
             return StatusCode(response.StatusCode, response);
         }
 
@@ -45,20 +36,13 @@ namespace Terminal.API.Controllers
         public async Task<ActionResult<ResponseDto<TicketActionResponseDto>>> Post([FromBody] TicketCreateDto dto)
         {
             var response = await _ticketService.CreateAsync(dto);
-
-            return StatusCode(response.StatusCode, new
-            {
-                response.Status,
-                response.Message,
-                response.Data,
-            });
+            return StatusCode(response.StatusCode, response);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<ResponseDto<TicketActionResponseDto>>> Delete(string id)
         {
             var response = await _ticketService.DeleteAsync(id);
-
             return StatusCode(response.StatusCode, response);
         }
     }

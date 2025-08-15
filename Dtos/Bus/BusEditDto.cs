@@ -2,5 +2,6 @@
 {
     public class BusEditDto : BusCreateDto
     {
+
     }
 }

@@ -11,12 +11,14 @@ namespace Terminal.API.DTOs
         public int Anio { get; set; }
         public LocationDto StartLocation { get; set; }
         public LocationDto EndLocation { get; set; }
-
         public string? ImageUrl { get; set; }
 
         // Empresas
         public string CompanyId { get; set; }
         public string CompanyName { get; set; }
+        //Ruta
+        public int RutaId { get; set; }
+        public string RutaNombre { get; set; }
 
     }
 }

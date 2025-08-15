@@ -21,12 +21,7 @@ namespace Terminal.API.Controllers
         {
             var response = await _horarioService.GetListAsync();
 
-            return StatusCode(response.StatusCode, new
-            {
-                response.Status,
-                response.Message,
-                response.Data
-            });
+            return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("{id}")]
@@ -34,12 +29,7 @@ namespace Terminal.API.Controllers
         {
             var response = await _horarioService.GetOneByIdAsync(id);
 
-            return StatusCode(response.StatusCode, new
-            {
-                response.Status,
-                response.Message,
-                response.Data
-            });
+            return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost]
@@ -47,25 +37,16 @@ namespace Terminal.API.Controllers
         {
             var response = await _horarioService.CreateAsync(dto);
 
-            return StatusCode(response.StatusCode, new
-            {
-                response.Status,
-                response.Message,
-                response.Data
-            });
+            return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPut]
-        public async Task<ActionResult<ResponseDto<HorarioActionResponseDto>>> Edit([FromBody] HorarioEditDto dto)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ResponseDto<HorarioActionResponseDto>>> Edit([FromBody] HorarioEditDto dto, int id)
         {
+            dto.Id = id;
             var response = await _horarioService.EditAsync(dto);
 
-            return StatusCode(response.StatusCode, new
-            {
-                response.Status,
-                response.Message,
-                response.Data
-            });
+            return StatusCode(response.StatusCode, response);
         }
 
         [HttpDelete("{id}")]
@@ -73,12 +54,7 @@ namespace Terminal.API.Controllers
         {
             var response = await _horarioService.DeleteAsync(id);
 
-            return StatusCode(response.StatusCode, new
-            {
-                response.Status,
-                response.Message,
-                response.Data
-            });
+            return StatusCode(response.StatusCode, response);
         }
     }
 }

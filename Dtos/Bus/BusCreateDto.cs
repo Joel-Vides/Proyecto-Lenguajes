@@ -40,5 +40,11 @@ namespace Terminal.Dtos.Bus
         [Display(Name = "Empresa")]
         [Required(ErrorMessage = "El {0} es requerido.")]
         public string CompanyId { get; set; }
+
+        // Ruta
+        [Display(Name = "Ruta")]
+        [Required(ErrorMessage = "La {0} es requerida.")]
+        public int RutaId { get; set; } // Nueva relación con Ruta
+
     }
 }

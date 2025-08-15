@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Terminal.Helpers;
-using Terminal.Database;
-using Terminal.Database.Entities;
 using Terminal.Dtos.Common;
 using Terminal.Dtos.Ruta;
 using Terminal.Services.Interfaces;
-using Terminal.Constants;
+using Terminal.Database;
+using Terminal.Database.Entities;
+using HttpStatusCode = Terminal.Constants.HttpStatusCode;
 
 namespace Terminal.Services
 {
@@ -35,6 +34,8 @@ namespace Terminal.Services
             int startIndex = (page - 1) * pageSize;
 
             IQueryable<RutaEntity> rutaQuery = _context.Rutas;
+
+            rutaQuery = rutaQuery.Include(r => r.Buses);
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
@@ -75,7 +76,9 @@ namespace Terminal.Services
 
         public async Task<ResponseDto<RutaDto>> GetOneByIdAsync(int id)
         {
+            // Corrección: Usar .Include() para cargar la colección de buses
             var rutaEntity = await _context.Rutas
+                .Include(r => r.Buses)
                 .FirstOrDefaultAsync(r => r.Id == id);
 
             if (rutaEntity is null)
@@ -112,20 +115,19 @@ namespace Terminal.Services
 
                     return new ResponseDto<RutaActionResponseDto>
                     {
-                        StatusCode = HttpStatusCode.CREATED,
+                        StatusCode = HttpStatusCode.OK,
                         Status = true,
                         Message = "Ruta creada correctamente",
                         Data = _mapper.Map<RutaActionResponseDto>(rutaEntity)
                     };
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Console.WriteLine(e.Message);
                     await transaction.RollbackAsync();
 
                     return new ResponseDto<RutaActionResponseDto>
                     {
-                        StatusCode = HttpStatusCode.INTERNAL_SERVER_ERROR,
+                        StatusCode = HttpStatusCode.NOT_FOUND,
                         Status = false,
                         Message = "Error interno en el servidor, contacte al administrador."
                     };
@@ -146,14 +148,13 @@ namespace Terminal.Services
                     {
                         return new ResponseDto<RutaActionResponseDto>
                         {
-                            StatusCode = HttpStatusCode.NOT_FOUND,
+                            StatusCode = Constants.HttpStatusCode.NOT_FOUND,
                             Status = false,
                             Message = "Registro no encontrado"
                         };
                     }
 
-                    _mapper.Map<RutaEditDto, RutaEntity>(dto, rutaEntity);
-
+                    _mapper.Map(dto, rutaEntity); // Mapeo sin sobrecarga
                     _context.Rutas.Update(rutaEntity);
                     await _context.SaveChangesAsync();
 
@@ -161,7 +162,7 @@ namespace Terminal.Services
 
                     return new ResponseDto<RutaActionResponseDto>
                     {
-                        StatusCode = HttpStatusCode.OK,
+                        StatusCode = Constants.HttpStatusCode.NOT_FOUND,
                         Status = true,
                         Message = "Ruta editada correctamente",
                         Data = _mapper.Map<RutaActionResponseDto>(rutaEntity)
@@ -173,7 +174,7 @@ namespace Terminal.Services
 
                     return new ResponseDto<RutaActionResponseDto>
                     {
-                        StatusCode = HttpStatusCode.INTERNAL_SERVER_ERROR,
+                        StatusCode = Constants.HttpStatusCode.NOT_FOUND,
                         Status = false,
                         Message = "Se produjo un error al editar el registro"
                     };
@@ -190,7 +191,7 @@ namespace Terminal.Services
             {
                 return new ResponseDto<RutaActionResponseDto>
                 {
-                    StatusCode = HttpStatusCode.NOT_FOUND,
+                    StatusCode = Constants.HttpStatusCode.NOT_FOUND,
                     Status = false,
                     Message = "Registro no encontrado"
                 };
@@ -201,7 +202,7 @@ namespace Terminal.Services
 
             return new ResponseDto<RutaActionResponseDto>
             {
-                StatusCode = HttpStatusCode.OK,
+                StatusCode = Constants.HttpStatusCode.NOT_FOUND,
                 Status = true,
                 Message = "Ruta eliminada correctamente",
                 Data = _mapper.Map<RutaActionResponseDto>(rutaEntity)

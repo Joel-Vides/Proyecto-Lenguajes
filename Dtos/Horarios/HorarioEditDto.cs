@@ -3,6 +3,5 @@
     public class HorarioEditDto : HorarioCreateDto
     {
         public int Id { get; set; }
-
     }
 }

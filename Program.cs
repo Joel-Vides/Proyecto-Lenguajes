@@ -1,10 +1,12 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Scalar.AspNetCore;
 using Terminal.API.Services;
 using Terminal.API.Services.Interfaces;
 using Terminal.Database;
+using Terminal.Database.Entities;
 using Terminal.Extensions;
 using Terminal.Helpers;
 using Terminal.Services;
@@ -17,12 +19,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<TerminalDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//Acceder Al contexto HTTP
+
+builder.Services.AddHttpContextAccessor();
 
 //builder.Services.AddDbContext<TerminalDbContext>(options =>
 //options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+builder.Services.AddIdentity<UserEntity, RoleEntity>()
+    .AddEntityFrameworkStores<TerminalDbContext>()
+    .AddDefaultTokenProviders();
+
 
 
 builder.Services.AddControllers();
@@ -32,6 +42,10 @@ builder.Services.AddTransient<IBusService, BusService>();
 builder.Services.AddTransient<IHorarioService, HorarioService>();
 builder.Services.AddTransient<ITicketService, TicketService>();
 builder.Services.AddTransient<IRutaService, RutaService>();
+builder.Services.AddTransient<IRolesService, RolesService>();
+builder.Services.AddTransient<IUsersService, UsersService>();
+builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuditService, AuditService>();
 
 builder.Services.AddCorsConfiguration(builder.Configuration);
 
@@ -53,6 +67,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -17,5 +17,8 @@ namespace Terminal.Dtos.Bus
 
         // Para Relacion con Companies
         public string CompanyId { get; set; }
+
+        //Para relacion con ruta
+        public int RutaId { get; set; }
     }
 }

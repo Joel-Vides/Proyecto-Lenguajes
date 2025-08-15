@@ -20,9 +20,10 @@ namespace Terminal.Database.Entities
 
         [Required]
         public string TotalKilometros { get; set; }
-
-        // Ignoramos relaciones por ahora
         public int BusId { get; set; }
         public int CompanyId { get; set; }
+
+        // Una Ruta tiene muchos Buses
+        public virtual ICollection<BusEntity> Buses { get; set; } = new List<BusEntity>();
     }
 }

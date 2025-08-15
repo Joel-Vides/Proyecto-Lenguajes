@@ -34,7 +34,9 @@ namespace Terminal.Services
 
             try
             {
-                IQueryable<BusEntity> query = _context.Buses.AsQueryable();
+                IQueryable<BusEntity> query = _context.Buses
+                    .Include(b => b.Ruta)
+                    .Include(b => b.Company);
 
                 if (!string.IsNullOrEmpty(searchTerm))
                 {
@@ -77,7 +79,7 @@ namespace Terminal.Services
             {
                 return new ResponseDto<PaginationDto<List<BusDto>>>
                 {
-                    StatusCode = HttpStatusCode.BAD_REQUEST,
+                    StatusCode = HttpStatusCode.INTERNAL_SERVER_ERROR,
                     Status = false,
                     Message = "Error al obtener Buses"
                 };
@@ -86,7 +88,10 @@ namespace Terminal.Services
 
         public async Task<ResponseDto<BusActionResponse>> GetOneByIdAsync(string id)
         {
-            var bus = await _context.Buses.FindAsync(id);
+            var bus = await _context.Buses
+                .Include(b => b.Ruta)
+                .Include(b => b.Company)
+                .FirstOrDefaultAsync(b => b.Id == id);
 
             if (bus is null)
             {
@@ -142,7 +147,6 @@ namespace Terminal.Services
                 };
             }
 
-            // Guardar imagen si no sale una nueva
             var originalImageUrl = busEntity.ImageUrl;
 
             _mapper.Map(dto, busEntity);

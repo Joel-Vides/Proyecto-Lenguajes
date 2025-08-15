@@ -1,5 +1,4 @@
-﻿using Terminal.API.Dtos.Tickets;
-using Terminal.Dtos.Common;
+﻿using Terminal.Dtos.Common;
 using Terminal.Dtos.Ticket;
 
 namespace Terminal.API.Services.Interfaces

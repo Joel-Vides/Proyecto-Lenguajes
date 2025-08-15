@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Terminal.Database.Entities.Common;
 
@@ -42,11 +43,19 @@ namespace Terminal.Database.Entities
         [Column("image_url")]
         public string? ImageUrl { get; set; }
 
-        // Foregn key para la Relación con Company
+        // Relación con Company
         [ForeignKey("Company")]
         [Column("company_id")]
         public string CompanyId { get; set; }
+        public virtual CompanyEntity Company { get; set; } 
 
-        public CompanyEntity Company { get; set; }
+        // Relación con Ruta
+        [ForeignKey("Ruta")] 
+        [Column("ruta_id")]
+        public int RutaId { get; set; }
+        public virtual RutaEntity Ruta { get; set; }
+
+        // Relación con Horarios
+        public virtual ICollection<HorarioEntity> Horarios { get; set; } = new List<HorarioEntity>(); 
     }
 }

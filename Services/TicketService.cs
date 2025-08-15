@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Terminal.API.Database.Entities;
-using Terminal.API.Dtos.Tickets;
 using Terminal.API.Services.Interfaces;
 using Terminal.Constants;
 using Terminal.Database;
+using Terminal.Database.Entities;
 using Terminal.Dtos.Common;
 using Terminal.Dtos.Ticket;
-using Terminal.Services.Interfaces;
 
 namespace Terminal.API.Services
 {
@@ -25,8 +23,8 @@ namespace Terminal.API.Services
         {
             _context = context;
             _mapper = mapper;
-            PAGE_SIZE = configuration.GetValue<int>("PageSize");
-            PAGE_SIZE_LIMIT = configuration.GetValue<int>("PageSizeLimit");
+            PAGE_SIZE = configuration.GetValue<int>("Pagination:PageSize");
+            PAGE_SIZE_LIMIT = configuration.GetValue<int>("Pagination:PageSizeLimit");
         }
 
         public async Task<ResponseDto<PaginationDto<List<TicketDto>>>> GetListAsync(
@@ -35,46 +33,60 @@ namespace Terminal.API.Services
             pageSize = pageSize == 0 ? PAGE_SIZE : pageSize;
             int startIndex = (page - 1) * pageSize;
 
-            IQueryable<TicketEntity> ticketsQuery = _context.Tickets;
-
-            if (!string.IsNullOrEmpty(searchTerm))
+            try
             {
-                ticketsQuery = ticketsQuery
-                    .Where(t => t.NumeroTicket.Contains(searchTerm));
-                             //|| t.SitioSalida.Contains(searchTerm));
-            }
+                IQueryable<TicketEntity> ticketsQuery = _context.Tickets
+                    .Include(t => t.Horario);
 
-            int totalRows = await ticketsQuery.CountAsync();
-
-            var ticketEntities = await ticketsQuery
-                .OrderByDescending(t => t.FechaEmision)
-                .Skip(startIndex)
-                .Take(pageSize)
-                .ToListAsync();
-
-            var ticketDtos = _mapper.Map<List<TicketDto>>(ticketEntities);
-
-            return new ResponseDto<PaginationDto<List<TicketDto>>>
-            {
-                StatusCode = HttpStatusCode.OK,
-                Status = true,
-                Message = "Registros obtenidos correctamente",
-                Data = new PaginationDto<List<TicketDto>>
+                if (!string.IsNullOrEmpty(searchTerm))
                 {
-                    CurrentPage = page,
-                    PageSize = pageSize,
-                    TotalItems = totalRows,
-                    TotalPages = (int)Math.Ceiling((double)totalRows / pageSize),
-                    Items = ticketDtos,
-                    HasNextPage = startIndex + pageSize < PAGE_SIZE_LIMIT && page < (int)Math.Ceiling((double)totalRows / pageSize),
-                    HasPreviousPage = page > 1
+                    ticketsQuery = ticketsQuery
+                        .Where(t => t.NumeroTicket.Contains(searchTerm));
                 }
-            };
+
+                int totalRows = await ticketsQuery.CountAsync();
+
+                var ticketEntities = await ticketsQuery
+                    .OrderByDescending(t => t.FechaEmision)
+                    .Skip(startIndex)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                var ticketDtos = _mapper.Map<List<TicketDto>>(ticketEntities);
+
+                return new ResponseDto<PaginationDto<List<TicketDto>>>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Status = true,
+                    Message = "Registros obtenidos correctamente",
+                    Data = new PaginationDto<List<TicketDto>>
+                    {
+                        CurrentPage = page,
+                        PageSize = pageSize,
+                        TotalItems = totalRows,
+                        TotalPages = (int)Math.Ceiling((double)totalRows / pageSize),
+                        Items = ticketDtos,
+                        HasNextPage = startIndex + pageSize < totalRows,
+                        HasPreviousPage = page > 1
+                    }
+                };
+            }
+            catch
+            {
+                return new ResponseDto<PaginationDto<List<TicketDto>>>
+                {
+                    StatusCode = HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    Status = false,
+                    Message = "Error al obtener tickets"
+                };
+            }
         }
 
         public async Task<ResponseDto<TicketDto>> GetOneByIdAsync(string id)
         {
-            var ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == id);
+            var ticket = await _context.Tickets
+                .Include(t => t.Horario)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (ticket is null)
             {
@@ -99,6 +111,9 @@ namespace Terminal.API.Services
         {
             var entity = _mapper.Map<TicketEntity>(dto);
             entity.Id = Guid.NewGuid().ToString();
+
+            entity.NumeroTicket = $"TKT-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
+            entity.FechaEmision = DateTime.Now; // Asignar la fecha de emisión actual
 
             _context.Tickets.Add(entity);
             await _context.SaveChangesAsync();

@@ -38,12 +38,7 @@ namespace Terminal.API.Controllers
         public async Task<ActionResult<ResponseDto<BusActionResponse>>> GetOne(string id)
         {
             var response = await _busService.GetOneByIdAsync(id);
-            return StatusCode((int)response.StatusCode, new
-            {
-                response.Status,
-                response.Message,
-                response.Data
-            });
+            return StatusCode((int)response.StatusCode, response);
         }
 
         [HttpPost]
@@ -51,7 +46,7 @@ namespace Terminal.API.Controllers
             [FromForm] BusCreateDto dto,
             IFormFile? image)
         {
-            // Para la Imagen
+            // Código de manejo de imagen
             if (image is not null && image.Length > 0)
             {
                 var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp" };
@@ -72,12 +67,7 @@ namespace Terminal.API.Controllers
             }
 
             var response = await _busService.CreateAsync(dto);
-            return StatusCode((int)response.StatusCode, new
-            {
-                response.Status,
-                response.Message,
-                response.Data
-            });
+            return StatusCode((int)response.StatusCode, response);
         }
 
         [HttpPut("{id}")]
@@ -86,7 +76,7 @@ namespace Terminal.API.Controllers
             IFormFile? image,
             string id)
         {
-            // Para La imgen del Bus
+            // Código de manejo de imagen...
             if (image is not null && image.Length > 0)
             {
                 var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp" };
@@ -107,24 +97,15 @@ namespace Terminal.API.Controllers
             }
 
             var response = await _busService.EditAsync(dto, id);
-            return StatusCode((int)response.StatusCode, new
-            {
-                response.Status,
-                response.Message,
-                response.Data
-            });
+
+            return StatusCode((int)response.StatusCode, response);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<ResponseDto<BusActionResponse>>> Delete(string id)
         {
             var response = await _busService.DeleteAsync(id);
-            return StatusCode((int)response.StatusCode, new
-            {
-                response.Status,
-                response.Message,
-                response.Data
-            });
+            return StatusCode((int)response.StatusCode, response);
         }
     }
 }

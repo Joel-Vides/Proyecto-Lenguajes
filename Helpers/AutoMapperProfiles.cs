@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Terminal.API.Database.Entities;
-using Terminal.API.Dtos.Tickets;
 using Terminal.API.DTOs;
 using Terminal.Database.Entities;
 using Terminal.Dtos.Bus;
 using Terminal.Dtos.Common;
 using Terminal.Dtos.Empresa;
 using Terminal.Dtos.Ruta;
+using Terminal.Dtos.Security.Roles;
+using Terminal.Dtos.Security.User;
 using Terminal.Dtos.Ticket;
 
 namespace Terminal.Helpers
@@ -36,7 +36,21 @@ namespace Terminal.Helpers
 
             CreateMap<CompanyEntity, CompanyDto>();
 
+            //Roles
+            CreateMap<RoleEntity, RoleDto>();
+            CreateMap<RoleEntity, RoleActionResponseDto>();
+            CreateMap<RoleCreateDto, RoleEntity>();
+            CreateMap<RoleEditDto, RoleEntity>();
 
+            CreateMap<UserEntity, UserDto>();
+            CreateMap<UserEntity, UserActionResponseDto>()
+                .ForMember(dest => dest.FullName, org =>
+                org.MapFrom(src => $"{src.FirstName} {src.LastName}"));
+
+            CreateMap<UserCreateDto, UserEntity>()
+                .ForMember(dest => dest.UserName, org =>
+                org.MapFrom(src => src.Email));
+            CreateMap<UserEditDto, UserEntity>();
 
 
             // Bus -> BusDto
